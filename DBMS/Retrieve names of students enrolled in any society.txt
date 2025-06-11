@@ -1,0 +1,2 @@
+select distinct S.Student_Name from
+STUDENT S join ENROLLMENT E on S.Roll_No;

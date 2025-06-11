@@ -1,0 +1,12 @@
+SELECT s.Soc_Name
+FROM SOCIETY s
+JOIN ENROLLMENT e ON s.Soc_Id = e.SID
+GROUP BY s.Soc_Id, s.Soc_Name
+HAVING COUNT(e.Roll_No) = (
+    SELECT MAX(student_count)
+    FROM (
+        SELECT COUNT(e2.Roll_No) AS student_count
+        FROM ENROLLMENT e2
+        GROUP BY e2.SID
+    ) AS counts
+);

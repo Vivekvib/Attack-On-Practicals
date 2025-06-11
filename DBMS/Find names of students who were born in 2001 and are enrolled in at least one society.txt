@@ -1,0 +1,4 @@
+SELECT DISTINCT s.Student_Name
+FROM STUDENT s
+JOIN ENROLLMENT e ON s.Roll_No = e.Roll_No
+WHERE YEAR(s.DOB) = 2001;

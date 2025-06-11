@@ -1,0 +1,9 @@
+SELECT 
+    so.Soc_Name AS Society_Name,
+    so.Mentor_Name AS Mentor_Name,
+    so.Total_Seats AS Total_Capacity,
+    COUNT(e.Roll_No) AS Total_Enrolled,
+    (so.Total_Seats - COUNT(e.Roll_No)) AS Unfilled_Seats
+FROM SOCIETY so
+LEFT JOIN ENROLLMENT e ON so.Soc_Id = e.SID
+GROUP BY so.Soc_Id, so.Soc_Name, so.Mentor_Name, so.Total_Seats;

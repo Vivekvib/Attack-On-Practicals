@@ -1,0 +1,3 @@
+SELECT Student_Name
+FROM STUDENT
+WHERE (Roll_No LIKE 'X%9' OR Roll_No LIKE '=%9');

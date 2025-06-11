@@ -1,0 +1,2 @@
+UPDATE SOCIETY
+SET Total_Seats = Total_Seats * 1.10;

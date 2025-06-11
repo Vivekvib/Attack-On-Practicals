@@ -1,0 +1,3 @@
+SELECT DISTINCT so.Soc_Name
+FROM SOCIETY so
+WHERE so.Mentor_Name LIKE '%Gupta%';

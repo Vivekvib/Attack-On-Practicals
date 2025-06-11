@@ -1,0 +1,4 @@
+SELECT so.Soc_Name, (so.Total_Seats - COUNT(e.Roll_No)) AS Vacant_Seats
+FROM SOCIETY so
+LEFT JOIN ENROLLMENT e ON so.Soc_Id = e.SID
+GROUP BY so.Soc_Id, so.Soc_Name, so.Total_Seats;

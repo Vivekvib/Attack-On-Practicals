@@ -1,0 +1,6 @@
+SELECT s.Student_Name
+FROM STUDENT s
+JOIN ENROLLMENT e ON s.Roll_No = e.Roll_No
+JOIN SOCIETY so ON e.SID = so.Soc_Id
+WHERE so.Soc_Name = 'NSS'
+ORDER BY s.DOB DESC;

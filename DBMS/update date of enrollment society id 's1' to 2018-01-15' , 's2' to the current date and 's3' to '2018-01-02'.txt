@@ -1,0 +1,7 @@
+UPDATE ENROLLMENT
+SET Date_of_Enrollment = CASE 
+    WHEN SID = 's1' THEN '2018-01-15'
+    WHEN SID = 's2' THEN CURDATE()
+    WHEN SID = 's3' THEN '2018-01-02'
+    ELSE Date_of_Enrollment
+END;

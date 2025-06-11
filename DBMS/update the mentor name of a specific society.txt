@@ -1,0 +1,3 @@
+UPDATE SOCIETY
+SET Mentor_Name = 'RAHUL'
+WHERE Soc_Id = '9992';

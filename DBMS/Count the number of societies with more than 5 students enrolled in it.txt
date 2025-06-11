@@ -1,0 +1,4 @@
+SELECT COUNT(DISTINCT e.SID) AS Societies_With_More_Than_5_Students
+FROM ENROLLMENT e
+GROUP BY e.SID
+HAVING COUNT(e.Roll_No) > 5;

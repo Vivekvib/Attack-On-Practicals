@@ -1,0 +1,4 @@
+SELECT s.Student_Name
+FROM STUDENT s
+LEFT JOIN ENROLLMENT e ON s.Roll_No = e.Roll_No
+WHERE e.SID IS NULL;

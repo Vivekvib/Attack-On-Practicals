@@ -1,0 +1,3 @@
+SELECT Student_Name
+FROM STUDENT
+WHERE Student_Name LIKE 'A%';

@@ -1,0 +1,5 @@
+CREATE VIEW Society_Enrollment_Count AS
+SELECT so.Soc_Name, COUNT(e.Roll_No) AS Total_Enrolled
+FROM SOCIETY so
+LEFT JOIN ENROLLMENT e ON so.Soc_Id = e.SID
+GROUP BY so.Soc_Id, so.Soc_Name;

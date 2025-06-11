@@ -1,0 +1,5 @@
+SELECT COUNT(DISTINCT so.Soc_Name) AS Society_Count
+FROM SOCIETY so
+JOIN ENROLLMENT e ON so.Soc_Id = e.SID
+GROUP BY so.Soc_Id, so.Soc_Name
+HAVING so.Soc_Name LIKE 'S%T' AND COUNT(e.Roll_No) >= 5;

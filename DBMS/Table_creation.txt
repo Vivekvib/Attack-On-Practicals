@@ -1,0 +1,40 @@
+create table STUDENT
+(Roll_No char(6) primary key,
+Student_Name varchar(20) Not null,
+Course varchar(30),
+DOB DATE);
+
+create table SOCIETY
+(Soc_Id char(6) Primary key,
+Soc_Name varchar(20) not null,
+Mentor_Name varchar(15),
+Total_Seats bigint);
+
+Create table ENROLLMENT
+(Roll_No char(6) Primary key,
+SID char(6) not null,
+Date_of_Enrollment DATE,
+foreign key(Roll_No) references STUDENT(Roll_No), foreign key(SID) references SOCIETY(Soc_Id));
+
+
+insert into STUDENT values(1001,'Vivek Nishad','BSC CS HONS','2005-01-05');
+insert into STUDENT values(1002,'Maanikk Gandhi','BSC CS HONS','2005-09-30');
+insert into STUDENT values(1003,'Vinamra','BSC CHEM HONS','2006-10-02');
+insert into STUDENT values(1004,'Leeraj','BA PROG','2004-05-27');
+insert into STUDENT values(1005,'DEVYANSHI','BA ECO HONS','2006-01-16');
+
+insert into SOCIETY values(9991,"ENSO","PURNIMA",7860);
+insert into SOCIETY values(9992,"D-Street","ARYAN",7860);
+insert into SOCIETY values(9993,"MARK-Z","ARPIT",7860);
+insert into SOCIETY values(9994,"PERSONA","ABHISHEK",7860);
+insert into SOCIETY values(9995,"EARTHA","NIHARIKA",7860);
+
+insert into ENROLLMENT values(1001,9991,'2023-09-13');
+insert into ENROLLMENT values(1002,9991,'2024-06-23');
+insert into ENROLLMENT values(1003,9992,'2024-02-13');
+insert into ENROLLMENT values(1004,9993,'2024-02-3');
+insert into ENROLLMENT values(1005,9994,'2023-12-30');
+
+select * from STUDENT;
+select * from SOCIETY;
+select * from ENROLLMENT;

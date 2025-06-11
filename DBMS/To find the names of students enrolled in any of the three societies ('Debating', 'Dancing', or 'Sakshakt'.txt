@@ -1,0 +1,5 @@
+SELECT DISTINCT s.Student_Name
+FROM STUDENT s
+JOIN ENROLLMENT e ON s.Roll_No = e.Roll_No
+JOIN SOCIETY so ON e.SID = so.Soc_Id
+WHERE so.Soc_Name IN ('Debating', 'Dancing', 'Sakshakt');

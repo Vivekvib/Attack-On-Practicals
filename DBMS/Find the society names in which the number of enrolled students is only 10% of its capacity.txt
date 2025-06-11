@@ -1,0 +1,5 @@
+SELECT so.Soc_Name
+FROM SOCIETY so
+JOIN ENROLLMENT e ON so.Soc_Id = e.SID
+GROUP BY so.Soc_Id, so.Soc_Name, so.Total_Seats
+HAVING COUNT(e.Roll_No) = 0.1 * so.Total_Seats;

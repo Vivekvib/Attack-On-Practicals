@@ -1,0 +1,6 @@
+SELECT s.Soc_Name, COUNT(e.Roll_No) AS Total_Enrolled
+FROM SOCIETY s
+JOIN ENROLLMENT e ON s.Soc_Id = e.SID
+GROUP BY s.Soc_Id, s.Soc_Name
+ORDER BY Total_Enrolled DESC
+LIMIT 1;

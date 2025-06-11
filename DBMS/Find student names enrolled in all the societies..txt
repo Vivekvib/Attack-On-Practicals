@@ -1,0 +1,5 @@
+SELECT s.Student_Name
+FROM STUDENT s
+JOIN ENROLLMENT e ON s.Roll_No = e.Roll_No
+GROUP BY s.Roll_No, s.Student_Name
+HAVING COUNT(DISTINCT e.SID) = (SELECT COUNT(*) FROM SOCIETY);
