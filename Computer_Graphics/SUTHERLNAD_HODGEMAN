@@ -1,0 +1,103 @@
+#include <graphics.h>
+#include <iostream>
+#include <vector>
+using namespace std;
+struct Point {
+    int x, y;
+};
+// Function to check if a point is inside the clipping window
+bool isInside(Point p, int xMin, int yMin, int xMax, int yMax) {
+    return (p.x >= xMin && p.x <= xMax && p.y >= yMin && p.y <= yMax);
+}
+// Function to find the intersection of the polygon edge and the clipping edge
+Point computeIntersection(Point p1, Point p2, int xMin, int yMin, int xMax, int yMax, int edge) {
+    Point intersection;
+    float slope = (float)(p2.y - p1.y) / (p2.x - p1.x);
+    if (edge == 1) {  // Left edge
+        intersection.x = xMin;
+        intersection.y = p1.y + slope * (xMin - p1.x);
+    }
+    else if (edge == 2) {  // Right edge
+        intersection.x = xMax;
+        intersection.y = p1.y + slope * (xMax - p1.x);
+    }
+    else if (edge == 3) {  // Bottom edge
+        intersection.y = yMin;
+        intersection.x = p1.x + (yMin - p1.y) / slope;
+    }
+    else if (edge == 4) {  // Top edge
+        intersection.y = yMax;
+        intersection.x = p1.x + (yMax - p1.y) / slope;
+    }
+    return intersection;
+}
+// Function to clip the polygon using the Sutherland-Hodgeman algorithm
+vector<Point> sutherlandHodgemanClip(vector<Point> polygon, int xMin, int yMin, int xMax, int yMax) {
+    vector<Point> clippedPolygon = polygon;
+    vector<Point> newPolygon;
+    int n = polygon.size();
+    // Clip the polygon against each edge of the clipping window
+    for (int edge = 1; edge <= 4; edge++) {
+        newPolygon.clear();
+        for (int i = 0; i < n; i++) {
+            Point current = clippedPolygon[i];
+            Point next = clippedPolygon[(i + 1) % n];
+            // Check if the current point is inside the clipping window
+            bool currentInside = isInside(current, xMin, yMin, xMax, yMax);
+            bool nextInside = isInside(next, xMin, yMin, xMax, yMax);
+            if (currentInside && nextInside) {
+                // If both points are inside, add the next point to the new polygon
+                newPolygon.push_back(next);
+            }
+            else if (currentInside && !nextInside) {
+                // If current is inside and next is outside, find the intersection
+                newPolygon.push_back(computeIntersection(current, next, xMin, yMin, xMax, yMax, edge));
+            }
+            else if (!currentInside && nextInside) {
+                // If current is outside and next is inside, find the intersection
+                newPolygon.push_back(computeIntersection(current, next, xMin, yMin, xMax, yMax, edge));
+                newPolygon.push_back(next);
+            }
+        }
+        clippedPolygon = newPolygon;
+        n = clippedPolygon.size();
+    }
+    return clippedPolygon;
+}
+// Function to draw the polygon
+void drawPolygon(vector<Point> polygon) {
+    for (int i = 0; i < polygon.size(); i++) {
+        int x1 = polygon[i].x, y1 = polygon[i].y;
+        int x2 = polygon[(i + 1) % polygon.size()].x, y2 = polygon[(i + 1) % polygon.size()].y;
+        line(x1, y1, x2, y2);
+    }
+}
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    // Define the clipping window (rectangular)
+    int xMin, yMin, xMax, yMax;
+    cout << "Enter the coordinates of the clipping window (xMin, yMin, xMax, yMax): ";
+    cin >> xMin >> yMin >> xMax >> yMax;
+    // Define a polygon (can be input by the user or defined statically)
+    vector<Point> polygon = {
+        {50, 50},
+        {250, 50},
+        {250, 250},
+        {150, 300},
+        {50, 250}
+    };
+    // Draw the clipping window
+    rectangle(xMin, yMin, xMax, yMax);
+    // Draw the original polygon
+    setcolor(RED);
+    drawPolygon(polygon);
+    // Clip the polygon using the Sutherland-Hodgeman algorithm
+    vector<Point> clippedPolygon = sutherlandHodgemanClip(polygon, xMin, yMin, xMax, yMax);
+    // Draw the clipped polygon
+    setcolor(GREEN);
+    drawPolygon(clippedPolygon);
+    delay(5000); // Wait for 5 seconds to view the result
+    closegraph();
+    return 0;
+}

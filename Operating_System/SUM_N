@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <pthread.h>
+using namespace std;
+// Structure to pass data to threads
+struct ThreadData {
+    vector<int>* numbers;  // Pointer to the sublist of numbers
+    int start;  // Starting index of the sublist
+    int end;  // Ending index of the sublist
+    int* result;  // Pointer to the result variable to store the sum
+};
+// Function to calculate the sum of a sublist
+void* calculateSum(void* arg) {
+    ThreadData* data = (ThreadData*) arg;
+    int sum = 0;
+    for (int i = data->start; i < data->end; ++i) {
+        sum += (*data->numbers)[i];
+    }
+    *(data->result) = sum;
+    return nullptr;
+}
+int main() {
+    int n;
+    // Input number of elements
+    cout << "Enter the number of elements: ";
+    cin >> n;
+    vector<int> numbers(n);
+    // Input the numbers
+    cout << "Enter the numbers:\n";
+    for (int i = 0; i < n; i++) {
+        cin >> numbers[i];
+    }
+    // Divide the list into two parts
+    int mid = n / 2;
+    int sum1 = 0, sum2 = 0;
+    // Create two threads
+    pthread_t thread1, thread2;
+    ThreadData data1 = {&numbers, 0, mid, &sum1};
+    ThreadData data2 = {&numbers, mid, n, &sum2};
+    // Create threads to sum the two sublists
+    pthread_create(&thread1, nullptr, calculateSum, (void*)&data1);
+    pthread_create(&thread2, nullptr, calculateSum, (void*)&data2);
+    // Wait for both threads to finish
+    pthread_join(thread1, nullptr);
+    pthread_join(thread2, nullptr);
+    // Combine the results from both threads
+    int totalSum = sum1 + sum2;
+    cout << "The total sum is: " << totalSum << endl;
+    return 0;
+}

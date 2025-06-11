@@ -1,0 +1,139 @@
+#include <iostream>
+#include <vector>
+#include <climits>
+
+using namespace std;
+
+struct Block {
+    int size;  // Size of the memory block
+    bool allocated;  // Flag to indicate if the block is allocated or not
+};
+
+struct Process {
+    int size;  // Size of the process
+    int allocation;  // The index of the allocated block (or -1 if not allocated)
+};
+
+// First-Fit Allocation
+void firstFit(vector<Block>& blocks, vector<Process>& processes) {
+    for (int i = 0; i < processes.size(); i++) {
+        for (int j = 0; j < blocks.size(); j++) {
+            if (!blocks[j].allocated && blocks[j].size >= processes[i].size) {
+                blocks[j].allocated = true;
+                processes[i].allocation = j;
+                break;
+            }
+        }
+    }
+}
+
+// Best-Fit Allocation
+void bestFit(vector<Block>& blocks, vector<Process>& processes) {
+    for (int i = 0; i < processes.size(); i++) {
+        int bestIdx = -1;
+        int minDiff = INT_MAX;
+        
+        for (int j = 0; j < blocks.size(); j++) {
+            if (!blocks[j].allocated && blocks[j].size >= processes[i].size) {
+                int diff = blocks[j].size - processes[i].size;
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    bestIdx = j;
+                }
+            }
+        }
+        
+        if (bestIdx != -1) {
+            blocks[bestIdx].allocated = true;
+            processes[i].allocation = bestIdx;
+        }
+    }
+}
+
+// Worst-Fit Allocation
+void worstFit(vector<Block>& blocks, vector<Process>& processes) {
+    for (int i = 0; i < processes.size(); i++) {
+        int worstIdx = -1;
+        int maxDiff = -1;
+        
+        for (int j = 0; j < blocks.size(); j++) {
+            if (!blocks[j].allocated && blocks[j].size >= processes[i].size) {
+                int diff = blocks[j].size - processes[i].size;
+                if (diff > maxDiff) {
+                    maxDiff = diff;
+                    worstIdx = j;
+                }
+            }
+        }
+        
+        if (worstIdx != -1) {
+            blocks[worstIdx].allocated = true;
+            processes[i].allocation = worstIdx;
+        }
+    }
+}
+
+// Display the result
+void displayResults(vector<Process>& processes, vector<Block>& blocks, const string& strategy) {
+    cout << "\n" << strategy << " Allocation:\n";
+    cout << "Process\tSize\tBlock Index\tBlock Size\n";
+    for (int i = 0; i < processes.size(); i++) {
+        cout << "P" << i + 1 << "\t" << processes[i].size << "\t";
+        if (processes[i].allocation != -1) {
+            cout << processes[i].allocation << "\t\t" << blocks[processes[i].allocation].size << endl;
+        } else {
+            cout << "Not Allocated\n";
+        }
+    }
+}
+
+int main() {
+    int numBlocks, numProcesses;
+
+    // Input number of blocks and processes
+    cout << "Enter the number of memory blocks: ";
+    cin >> numBlocks;
+    cout << "Enter the number of processes: ";
+    cin >> numProcesses;
+
+    vector<Block> blocks(numBlocks);
+    vector<Process> processes(numProcesses);
+
+    // Input block sizes
+    cout << "Enter the sizes of memory blocks:\n";
+    for (int i = 0; i < numBlocks; i++) {
+        cout << "Block " << i + 1 << ": ";
+        cin >> blocks[i].size;
+        blocks[i].allocated = false;  // Initially, all blocks are unallocated
+    }
+
+    // Input process sizes
+    cout << "Enter the sizes of processes:\n";
+    for (int i = 0; i < numProcesses; i++) {
+        cout << "Process " << i + 1 << ": ";
+        cin >> processes[i].size;
+        processes[i].allocation = -1;  // Initially, no process is allocated
+    }
+
+    // First-Fit Allocation
+    firstFit(blocks, processes);
+    displayResults(processes, blocks, "First-Fit");
+
+    // Reset allocation state
+    for (int i = 0; i < numBlocks; i++) blocks[i].allocated = false;
+    for (int i = 0; i < numProcesses; i++) processes[i].allocation = -1;
+
+    // Best-Fit Allocation
+    bestFit(blocks, processes);
+    displayResults(processes, blocks, "Best-Fit");
+
+    // Reset allocation state
+    for (int i = 0; i < numBlocks; i++) blocks[i].allocated = false;
+    for (int i = 0; i < numProcesses; i++) processes[i].allocation = -1;
+
+    // Worst-Fit Allocation
+    worstFit(blocks, processes);
+    displayResults(processes, blocks, "Worst-Fit");
+
+    return 0;
+}

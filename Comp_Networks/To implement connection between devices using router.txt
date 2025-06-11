@@ -1,0 +1,12 @@
+# To implement connection between devices using router
+
+2 Laptop & 1 1841 Router(Miscelleanous) Connect(Auto Wire)
+Lap1 ->Config-> Set IP Address:192.167.1.2
+Lap2 ->Config-> Set IP Address:192.167.2.2
+Router -> Config-> Port Status: On
+                -> Fast Ether0/0 ->IP add: 192.167.1.1
+                -> Fast Ether0/1 ->IP add: 192.167.2.1
+Lap1 -> Desktop-> IP Config-> Default Gateway: 192.167.1.1
+
+Lap2 -> Desktop-> IP Config-> Default Gateway: 192.167.2.1
+Send a PDU Message

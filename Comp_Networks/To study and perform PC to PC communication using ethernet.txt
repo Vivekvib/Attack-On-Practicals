@@ -1,0 +1,12 @@
+# To study and perform PC to PC communication using ethernet
+
+Select 2 PC Connect them through (Copper Cross Wire) Fastethernet
+Double click PC0
+Configure-> FastEthernet: Ip4V Address-192.168.23.1
+Double click PC1
+Configure-> FastEthernet: Ip4V Address-192.168.23.2
+Double click PC0
+Desktop-> Command Prompt: ping 192.168.23.2
+Double click PC1
+Desktop-> Command Prompt: ping 192.168.23.1
+Send a PDU message check with stimulation

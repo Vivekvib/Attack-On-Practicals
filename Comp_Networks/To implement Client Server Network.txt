@@ -1,0 +1,12 @@
+# To implement Client Server Network
+
+4PC, 1 2950 Swith & Server-PT (Connect with auto wire)
+Open server->Config->Fastethernet IPV4 add: 192.168.1.1
+           ->Services->DHCP-> Service: On
+                           -> Default Gateway:192.168.1.1
+                           -> Start IP Add: 192/168/1/101
+                           -> Maximum No:24
+                           -> Save
+           -> Config-> Global Defualt Gateway: 192.168.1.1
+
+Send PDU message and check if everything is fine

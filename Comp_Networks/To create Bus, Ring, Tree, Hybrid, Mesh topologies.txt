@@ -1,0 +1,10 @@
+# To create Bus, Ring, Tree, Hybrid, Mesh topologies
+
+RING CIRCUIT: 4PC and 4-2960 Switch Connect (Auto) PC<->Switch & Switch (SQUARE)
+BUS CIRCUIT : 5PC and 1-2960 Switch Connect (Auto) 
+STAR CIRCUIT: 3PC and 3-2960 Switch Connect (Auto)
+MESH CIRCUIT: 4PC and 4-2960 Switch Connect (Auto) PC<->Switch & Switch (SQUARE & Diagonal)
+
+Assign Ip4v Address:192.168.10.1/2/3/4/5/.....
+Send PDU Messages
+

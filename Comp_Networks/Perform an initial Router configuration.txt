@@ -1,0 +1,18 @@
+# Perform an initial Router configuration
+
+1 1941 Switch(Viva)
+Open Physical; Put HWIC-2T in the slot
+Open CLI
+enable;config t;hostname viva;exit
+copy running-config start
+ON/OFF the power button in PHYSICAL
+
+1 194 Switch
+Open Physical; Put HWIC-2T in the slot
+ 
+Connect both the switch by Serial DCE wire in Serial 0/1/0
+
+IN Viva enable; sh ip int brief; interface Serial0/1/0; ip address 12.1.1.1 255.255.255.0; no shut;exit;exit
+at last-> (ping 12.1.1.1)
+In Switch enable; sh ip int brief; config t; interface Serial0/1/0; ip address 12.1.1.2 255.255.255.0; no shut; exit;exit
+sh int Se0/1/0

@@ -1,0 +1,6 @@
+# To create Star topology using hub and switch
+
+5PC and 1 2960 Switch(Miscellaneous) Connect with Copper wire in Fastethernet (Auto)
+6PC and 1 PT-HUB (Network Devices-> Hubs) Connect with Copper wire in Fastethernet (Auto)
+Assign IPv4 Address to each of the PCs
+Start the stimulation and observe the working of switch and Hub

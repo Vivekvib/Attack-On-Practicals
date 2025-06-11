@@ -1,0 +1,143 @@
+#include <iostream>
+#include <graphics.h>
+#include <cmath>
+#include <vector>
+using namespace std;
+struct Point3D {
+    float x, y, z;
+};
+struct Matrix4x4 {
+    float m[4][4];
+};
+// Function to multiply a 4x4 matrix with a 3D point in homogeneous coordinates
+Point3D multiplyMatrixWithPoint(Matrix4x4 &mat, Point3D &pt) {
+    Point3D result;
+    result.x = mat.m[0][0] * pt.x + mat.m[0][1] * pt.y + mat.m[0][2] * pt.z + mat.m[0][3];
+    result.y = mat.m[1][0] * pt.x + mat.m[1][1] * pt.y + mat.m[1][2] * pt.z + mat.m[1][3];
+    result.z = mat.m[2][0] * pt.x + mat.m[2][1] * pt.y + mat.m[2][2] * pt.z + mat.m[2][3];
+    return result;
+}
+// Function to apply translation transformation
+Matrix4x4 getTranslationMatrix(float tx, float ty, float tz) {
+    Matrix4x4 mat = {
+        {{1, 0, 0, tx},
+         {0, 1, 0, ty},
+         {0, 0, 1, tz},
+         {0, 0, 0, 1}}
+    };
+    return mat;
+}
+// Function to apply scaling transformation
+Matrix4x4 getScalingMatrix(float sx, float sy, float sz) {
+    Matrix4x4 mat = {
+        {{sx, 0, 0, 0},
+         {0, sy, 0, 0},
+         {0, 0, sz, 0},
+         {0, 0, 0, 1}}
+    };
+    return mat;
+}
+// Function to apply rotation around the X-axis
+Matrix4x4 getRotationMatrixX(float angle) {
+    float rad = angle * M_PI / 180.0;
+    Matrix4x4 mat = {
+        {{1, 0, 0, 0},
+         {0, cos(rad), -sin(rad), 0},
+         {0, sin(rad), cos(rad), 0},
+         {0, 0, 0, 1}}
+    };
+    return mat;
+}
+// Function to apply rotation around the Y-axis
+Matrix4x4 getRotationMatrixY(float angle) {
+    float rad = angle * M_PI / 180.0;
+    Matrix4x4 mat = {
+        {{cos(rad), 0, sin(rad), 0},
+         {0, 1, 0, 0},
+         {-sin(rad), 0, cos(rad), 0},
+         {0, 0, 0, 1}}
+    };
+    return mat;
+}
+// Function to apply rotation around the Z-axis
+Matrix4x4 getRotationMatrixZ(float angle) {
+    float rad = angle * M_PI / 180.0;
+    Matrix4x4 mat = {
+        {{cos(rad), -sin(rad), 0, 0},
+         {sin(rad), cos(rad), 0, 0},
+         {0, 0, 1, 0},
+         {0, 0, 0, 1}}
+    };
+    return mat;
+}
+// Function to perform parallel projection
+Point3D parallelProjection(Point3D pt, int d) {
+    Point3D result;
+    result.x = pt.x;
+    result.y = pt.y;
+    result.z = pt.z; // Z-coordinate is retained in parallel projection
+    return result;
+}
+// Function to perform perspective projection
+Point3D perspectiveProjection(Point3D pt, int d) {
+    Point3D result;
+    result.x = (d * pt.x) / pt.z;
+    result.y = (d * pt.y) / pt.z;
+    result.z = d;  // Set the Z coordinate based on the perspective depth
+    return result;
+}
+// Function to draw the 3D object after transformations and projection
+void draw3DObject(vector<Point3D> &vertices) {
+    for (size_t i = 0; i < vertices.size(); ++i) {
+        int x1 = static_cast<int>(vertices[i].x);
+        int y1 = static_cast<int>(vertices[i].y);
+        int x2 = static_cast<int>(vertices[(i + 1) % vertices.size()].x);
+        int y2 = static_cast<int>(vertices[(i + 1) % vertices.size()].y);
+        line(x1 + 320, y1 + 240, x2 + 320, y2 + 240); // Offset to center the object
+    }
+}
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    // Define a cube in 3D space (vertices of a cube)
+    vector<Point3D> vertices = {
+        {100, 100, 100}, {-100, 100, 100}, {-100, -100, 100}, {100, -100, 100},
+        {100, 100, -100}, {-100, 100, -100}, {-100, -100, -100}, {100, -100, -100}
+    };
+    // Define the projection depth
+    int d = 500;
+    // Apply 3D transformations: Translation, Scaling, and Rotation
+    Matrix4x4 translation = getTranslationMatrix(150, 150, 0);
+    Matrix4x4 scaling = getScalingMatrix(1.5, 1.5, 1.5);
+    Matrix4x4 rotationX = getRotationMatrixX(30);
+    Matrix4x4 rotationY = getRotationMatrixY(30);
+    Matrix4x4 rotationZ = getRotationMatrixZ(30);
+    // Apply transformations to each vertex
+    for (auto &vertex : vertices) {
+        vertex = multiplyMatrixWithPoint(translation, vertex);
+        vertex = multiplyMatrixWithPoint(scaling, vertex);
+        vertex = multiplyMatrixWithPoint(rotationX, vertex);
+        vertex = multiplyMatrixWithPoint(rotationY, vertex);
+        vertex = multiplyMatrixWithPoint(rotationZ, vertex);
+    }
+    // Apply Parallel Projection to the transformed object
+    vector<Point3D> parallelVertices = vertices;
+    for (auto &vertex : parallelVertices) {
+        vertex = parallelProjection(vertex, d);
+    }
+    // Draw the parallel projection
+    setcolor(RED);
+    draw3DObject(parallelVertices);
+    delay(1000); // Wait for a second
+    // Apply Perspective Projection to the transformed object
+    vector<Point3D> perspectiveVertices = vertices;
+    for (auto &vertex : perspectiveVertices) {
+        vertex = perspectiveProjection(vertex, d);
+    }
+    // Draw the perspective projection
+    setcolor(BLUE);
+    draw3DObject(perspectiveVertices);
+    delay(5000); // Wait for 5 seconds to view the result
+    closegraph();
+    return 0;
+}

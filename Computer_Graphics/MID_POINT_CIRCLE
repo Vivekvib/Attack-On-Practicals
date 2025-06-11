@@ -1,0 +1,56 @@
+#include <graphics.h>
+#include <cmath>
+#include <iostream>
+using namespace std;
+// Mid-point Circle Drawing Algorithm
+void midpointCircle(int x0, int y0, int r) {
+    int x = 0;
+    int y = r;
+    int p = 1 - r; // Initial decision parameter
+    // Plot the initial points in all octants
+    putpixel(x0 + x, y0 - y, WHITE); // (x + h, y - k)
+    putpixel(x0 - x, y0 - y, WHITE); // (-x + h, y - k)
+    putpixel(x0 + x, y0 + y, WHITE); // (x + h, y + k)
+    putpixel(x0 - x, y0 + y, WHITE); // (-x + h, y + k)
+    putpixel(x0 + y, y0 - x, WHITE); // (y + h, -x + k)
+    putpixel(x0 - y, y0 - x, WHITE); // (-y + h, -x + k)
+    putpixel(x0 + y, y0 + x, WHITE); // (y + h, x + k)
+    putpixel(x0 - y, y0 + x, WHITE); // (-y + h, x + k)
+    // Iterate to plot all the points of the circle
+    while (x < y) {
+        x++;
+        // Update the decision parameter based on its value
+        if (p < 0) {
+            p += 2 * x + 1;
+        } else {
+            y--;
+            p += 2 * (x - y) + 1;
+        }       
+        // Plot the points in all octants
+        putpixel(x0 + x, y0 - y, WHITE); // (x + h, y - k)
+        putpixel(x0 - x, y0 - y, WHITE); // (-x + h, y - k)
+        putpixel(x0 + x, y0 + y, WHITE); // (x + h, y + k)
+        putpixel(x0 - x, y0 + y, WHITE); // (-x + h, y + k)
+        putpixel(x0 + y, y0 - x, WHITE); // (y + h, -x + k)
+        putpixel(x0 - y, y0 - x, WHITE); // (-y + h, -x + k)
+        putpixel(x0 + y, y0 + x, WHITE); // (y + h, x + k)
+        putpixel(x0 - y, y0 + x, WHITE); // (-y + h, x + k)
+    }
+}
+int main() {
+    // Initialize graphics mode
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    int x0, y0, r;
+    // Get the center and radius of the circle from user input
+    cout << "Enter the center of the circle (x0, y0): ";
+    cin >> x0 >> y0;
+    cout << "Enter the radius of the circle: ";
+    cin >> r;
+    // Draw the circle using the Mid-point Circle Algorithm
+    midpointCircle(x0, y0, r);
+    delay(5000);  // Wait for 5 seconds to view the circle
+    // Close the graphics window
+    closegraph();
+    return 0;
+}

@@ -1,0 +1,13 @@
+Bhai to baat aise hai Linux pr graphics.h file chaiye hogi tumhe
+Bhen ki chutx college k computer mai bhi ni hoga kuch to tumhari help krne k liye bani hai ye file
+Shant se BASH urf terminal khol lena and fir usme ye code copy paste kr dena :
+
+"wget https://sourceforge.net/projects/libxbgi/files/xbgi_365-1_amd64.deb"
+
+ye tha first code iske baad kuch kuch hoga wait krna fir jb wo ho jaye tb next code copy paste krna "
+
+"sudo dpkg -i xbgi_365-1_amd64.deb"
+
+iski bhen ka tandola ye bhi run kr do fir sax sux ek dum 
+maza ajyega baaki codes hai hi baju mai 
+KRO MAUZ APKE ABBU NE APKI MDT KI HAI CANTEEN SE KUCH KHILA DENA

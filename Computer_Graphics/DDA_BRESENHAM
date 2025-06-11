@@ -1,0 +1,66 @@
+#include <graphics.h>
+#include <math.h>
+#include <iostream>
+using namespace std;
+// Function for DDA Line Drawing Algorithm
+void ddaLine(int x1, int y1, int x2, int y2) {
+    int dx = x2 - x1;
+    int dy = y2 - y1;
+    int steps;
+    // Determine the number of steps needed
+    if (abs(dx) > abs(dy)) {
+        steps = abs(dx);
+    } else {
+        steps = abs(dy);
+    }
+    // Calculate increment for each step
+    float xIncrement = dx / float(steps);
+    float yIncrement = dy / float(steps);
+    float x = x1;
+    float y = y1;
+    // Draw the line pixel by pixel
+    for (int i = 0; i <= steps; i++) {
+        putpixel(round(x), round(y), WHITE);  // Plot pixel
+        x += xIncrement;
+        y += yIncrement;
+    }
+}
+// Function for Bresenham's Line Drawing Algorithm
+void bresenhamLine(int x1, int y1, int x2, int y2) {
+    int dx = abs(x2 - x1);
+    int dy = abs(y2 - y1);
+    int sx = (x1 < x2) ? 1 : -1;
+    int sy = (y1 < y2) ? 1 : -1;
+    int err = dx - dy;
+    while (true) {
+        putpixel(x1, y1, WHITE);  // Plot pixel
+        if (x1 == x2 && y1 == y2) break;
+        int e2 = err * 2;
+        if (e2 > -dy) {
+            err -= dy;
+            x1 += sx;
+        }
+        if (e2 < dx) {
+            err += dx;
+            y1 += sy;
+        }
+    }
+}
+int main() {
+    // Initialize graphics mode
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    int x1, y1, x2, y2;
+    cout << "Enter coordinates for DDA Line Drawing (x1, y1, x2, y2): ";
+    cin >> x1 >> y1 >> x2 >> y2;
+    ddaLine(x1, y1, x2, y2);  // DDA Line Drawing
+    delay(500);  // Pause to view DDA Line
+    // Clear the screen
+    cleardevice();
+    cout << "Enter coordinates for Bresenham Line Drawing (x1, y1, x2, y2): ";
+    cin >> x1 >> y1 >> x2 >> y2;
+    bresenhamLine(x1, y1, x2, y2);  // Bresenham's Line Drawing
+    delay(5000);  // Wait for 5 seconds to view Bresenham Line
+    closegraph();
+    return 0;
+}

@@ -1,0 +1,74 @@
+#include <graphics.h>
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+struct Point {
+    int x, y;
+};
+// Function to compare two points by their y-coordinate
+bool comparePoints(Point p1, Point p2) {
+    return p1.y < p2.y;
+}
+// Function to find the intersection of a scan line with a polygon edge
+float findIntersection(Point p1, Point p2, int y) {
+    return p1.x + (y - p1.y) * (p2.x - p1.x) / (float)(p2.y - p1.y);
+}
+// Function to fill the polygon using Scan Line Algorithm
+void scanLineFill(vector<Point> polygon) {
+    // Sort the points based on the y-coordinate
+    sort(polygon.begin(), polygon.end(), comparePoints);
+    // Find the y-min and y-max values
+    int yMin = polygon[0].y;
+    int yMax = polygon[polygon.size() - 1].y;
+    // Iterate over each scan line (from yMin to yMax)
+    for (int y = yMin; y <= yMax; y++) {
+        vector<float> intersections;
+        // Find all intersections of the scan line with the polygon edges
+        for (int i = 0; i < polygon.size(); i++) {
+            int j = (i + 1) % polygon.size();
+            if ((polygon[i].y <= y && polygon[j].y > y) || (polygon[j].y <= y && polygon[i].y > y)) {
+                // The scan line intersects with this edge
+                float x = findIntersection(polygon[i], polygon[j], y);
+                intersections.push_back(x);
+            }
+        }
+        // Sort the intersections
+        sort(intersections.begin(), intersections.end());
+        // Fill the pixels between pairs of intersections
+        for (int i = 0; i < intersections.size(); i += 2) {
+            for (int x = (int)intersections[i]; x <= (int)intersections[i + 1]; x++) {
+                putpixel(x, y, WHITE);  // Fill the pixel
+            }
+        }
+    }
+}
+// Function to draw the polygon
+void drawPolygon(vector<Point> polygon) {
+    for (int i = 0; i < polygon.size(); i++) {
+        int x1 = polygon[i].x, y1 = polygon[i].y;
+        int x2 = polygon[(i + 1) % polygon.size()].x, y2 = polygon[(i + 1) % polygon.size()].y;
+        line(x1, y1, x2, y2);  // Draw the edge of the polygon
+    }
+}
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    // Define the polygon (can be input by the user or statically defined)
+    vector<Point> polygon = {
+        {100, 100},
+        {300, 100},
+        {300, 300},
+        {150, 350},
+        {50, 250}
+    };
+    // Draw the polygon
+    setcolor(RED);
+    drawPolygon(polygon);
+    // Fill the polygon using the Scan Line Algorithm
+    setcolor(GREEN);
+    scanLineFill(polygon);
+    delay(5000);  // Wait for 5 seconds to view the result
+    closegraph();
+    return 0;
+}

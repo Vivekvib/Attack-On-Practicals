@@ -1,0 +1,80 @@
+#include <iostream>
+#include <vector>
+#include <iomanip> // for std::setw()
+
+using namespace std;
+
+// Structure to represent a process
+struct Process {
+    int pid;        // Process ID
+    int burstTime;  // Burst time (execution time)
+    int waitingTime;    // Waiting time
+    int turnAroundTime; // Turnaround time
+};
+
+// Function to calculate waiting time for each process
+void calculateWaitingTime(vector<Process>& processes) {
+    processes[0].waitingTime = 0; // First process has no waiting time
+
+    // Calculate waiting time for the rest of the processes
+    for (size_t i = 1; i < processes.size(); i++) {
+        processes[i].waitingTime = processes[i - 1].waitingTime + processes[i - 1].burstTime;
+    }
+}
+
+// Function to calculate turnaround time for each process
+void calculateTurnaroundTime(vector<Process>& processes) {
+    for (size_t i = 0; i < processes.size(); i++) {
+        processes[i].turnAroundTime = processes[i].waitingTime + processes[i].burstTime;
+    }
+}
+
+// Function to display process details and results
+void displayProcesses(const vector<Process>& processes) {
+    cout << "\nProcess\tBurst Time\tWaiting Time\tTurnaround Time\n";
+    cout << "-------------------------------------------------------\n";
+
+    for (const auto& process : processes) {
+        cout << "P" << process.pid << "\t"
+             << setw(10) << process.burstTime << "\t"
+             << setw(12) << process.waitingTime << "\t"
+             << setw(15) << process.turnAroundTime << endl;
+    }
+
+    // Calculate and display average waiting and turnaround times
+    double totalWaitingTime = 0, totalTurnaroundTime = 0;
+    for (const auto& process : processes) {
+        totalWaitingTime += process.waitingTime;
+        totalTurnaroundTime += process.turnAroundTime;
+    }
+    cout << "\nAverage Waiting Time: " << totalWaitingTime / processes.size() << endl;
+    cout << "Average Turnaround Time: " << totalTurnaroundTime / processes.size() << endl;
+}
+
+// Main function
+int main() {
+    int n;
+
+    // Input number of processes
+    cout << "Enter the number of processes: ";
+    cin >> n;
+
+    vector<Process> processes(n);
+
+    // Input burst times for each process
+    cout << "Enter the burst times for each process:\n";
+    for (int i = 0; i < n; i++) {
+        processes[i].pid = i + 1;
+        cout << "Burst time for process P" << processes[i].pid << ": ";
+        cin >> processes[i].burstTime;
+    }
+
+    // Calculate waiting and turnaround times
+    calculateWaitingTime(processes);
+    calculateTurnaroundTime(processes);
+
+    // Display the results
+    displayProcesses(processes);
+
+    return 0;
+}

@@ -1,0 +1,38 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+void report_memory_info() {
+    ifstream meminfo("/proc/meminfo");
+    string line;
+    long total_memory = 0;
+    long free_memory = 0;
+    if (meminfo.is_open()) {
+        while (getline(meminfo, line)) {
+            if (line.find("MemTotal:") == 0) {
+                total_memory = stol(line.substr(line.find(":") + 1));
+            }
+            if (line.find("MemFree:") == 0) {
+                free_memory =stol(line.substr(line.find(":") + 1));
+            }
+            if (total_memory > 0 && free_memory > 0) {
+                break;
+            }
+        }
+        meminfo.close();
+        long used_memory = total_memory - free_memory;
+        cout << "Memory Information:" << endl;
+        cout << "-------------------" << endl;
+        cout << "Configured Memory: " << total_memory / 1024 << " MB" << endl;
+        cout << "Free Memory:       " << free_memory / 1024 << " MB" << endl;
+        cout << "Used Memory:       " << used_memory / 1024 << " MB" << endl;
+    } else {
+        cerr << "Unable to open /proc/meminfo" << endl;
+    }
+}
+int main() {
+    cout << "Linux Kernel Memory Report" << endl;
+    cout << "--------------------------" << endl;
+    report_memory_info();
+    return 0;
+}

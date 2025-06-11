@@ -1,0 +1,39 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <cstdlib>
+using namespace std;
+void get_kernel_version() {
+    cout << "Kernel Version: ";
+    system("uname -r"); // Executes a shell command to get the kernel version
+}
+void get_cpu_info() {
+    ifstream cpuinfo("/proc/cpuinfo");
+    string line;
+    string model_name;
+    string vendor_id;
+    if (cpuinfo.is_open()) {
+        while (getline(cpuinfo, line)) {
+            if (line.find("model name") != string::npos) {
+                model_name = line.substr(line.find(":") + 2);
+        }
+            if (line.find("vendor_id") != string::npos) {
+                vendor_id = line.substr(line.find(":") + 2);
+            }
+        }
+        cpuinfo.close();
+        if (!vendor_id.empty())
+            cout <<"CPU Type: "<< vendor_id << endl;
+        if (!model_name.empty())
+            cout <<"CPU Model: "<< model_name << endl;
+    } else {
+        cerr << "Unable to open /proc/cpuinfo" << endl;
+    }
+}
+int main() {
+    cout << "Linux Kernel Behavior Report" << endl;
+    cout << "----------------------------" << endl;
+    get_kernel_version();
+    get_cpu_info();
+    return 0;
+}

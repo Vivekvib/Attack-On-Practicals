@@ -1,0 +1,114 @@
+#include <iostream>
+#include <vector>
+#include <climits> // For INT_MAX
+#include <iomanip> // For formatting output
+
+using namespace std;
+
+// Structure to represent a process
+struct Process {
+    int pid;          // Process ID
+    int arrivalTime;  // Arrival time
+    int burstTime;    // Burst time (execution time)
+    int remainingTime; // Remaining burst time
+    int completionTime; // Completion time
+    int waitingTime;  // Waiting time
+    int turnAroundTime; // Turnaround time
+};
+
+// Function to calculate SRTF scheduling
+void SRTFScheduling(vector<Process>& processes) {
+    int n = processes.size();
+    int currentTime = 0; // Current time in the system
+    int completed = 0;   // Number of processes completed
+    int shortestProcess = -1; // Index of the process with the shortest remaining time
+    int minRemainingTime = INT_MAX;
+
+    while (completed < n) {
+        // Find the process with the shortest remaining time at the current time
+        for (int i = 0; i < n; i++) {
+            if (processes[i].arrivalTime <= currentTime && processes[i].remainingTime > 0 &&
+                processes[i].remainingTime < minRemainingTime) {
+                shortestProcess = i;
+                minRemainingTime = processes[i].remainingTime;
+            }
+        }
+
+        if (shortestProcess == -1) { // No process is ready to execute
+            currentTime++;
+            continue;
+        }
+
+        // Execute the selected process for 1 unit of time
+        processes[shortestProcess].remainingTime--;
+        currentTime++;
+
+        // Check if the process is completed
+        if (processes[shortestProcess].remainingTime == 0) {
+            completed++;
+            processes[shortestProcess].completionTime = currentTime;
+            minRemainingTime = INT_MAX; // Reset for the next iteration
+            shortestProcess = -1;
+        }
+    }
+
+    // Calculate waiting time and turnaround time
+    for (int i = 0; i < n; i++) {
+        processes[i].turnAroundTime = processes[i].completionTime - processes[i].arrivalTime;
+        processes[i].waitingTime = processes[i].turnAroundTime - processes[i].burstTime;
+    }
+}
+
+// Function to display the results
+void displayProcesses(const vector<Process>& processes) {
+    cout << "\nProcess\tArrival Time\tBurst Time\tCompletion Time\tWaiting Time\tTurnaround Time\n";
+    cout << "---------------------------------------------------------------------------\n";
+
+    for (const auto& process : processes) {
+        cout << "P" << process.pid << "\t"
+             << setw(12) << process.arrivalTime << "\t"
+             << setw(10) << process.burstTime << "\t"
+             << setw(15) << process.completionTime << "\t"
+             << setw(12) << process.waitingTime << "\t"
+             << setw(15) << process.turnAroundTime << endl;
+    }
+
+    // Calculate and display average waiting time and turnaround time
+    double totalWaitingTime = 0, totalTurnaroundTime = 0;
+    for (const auto& process : processes) {
+        totalWaitingTime += process.waitingTime;
+        totalTurnaroundTime += process.turnAroundTime;
+    }
+    cout << "\nAverage Waiting Time: " << totalWaitingTime / processes.size() << endl;
+    cout << "Average Turnaround Time: " << totalTurnaroundTime / processes.size() << endl;
+}
+
+// Main function
+int main() {
+    int n;
+
+    // Input number of processes
+    cout << "Enter the number of processes: ";
+    cin >> n;
+
+    vector<Process> processes(n);
+
+    // Input arrival times and burst times for each process
+    cout << "Enter the arrival time and burst time for each process:\n";
+    for (int i = 0; i < n; i++) {
+        processes[i].pid = i + 1;
+        cout << "Arrival time for process P" << processes[i].pid << ": ";
+        cin >> processes[i].arrivalTime;
+        cout << "Burst time for process P" << processes[i].pid << ": ";
+        cin >> processes[i].burstTime;
+        processes[i].remainingTime = processes[i].burstTime; // Initialize remaining time
+    }
+
+    // Perform SRTF scheduling
+    SRTFScheduling(processes);
+
+    // Display the results
+    displayProcesses(processes);
+
+    return 0;
+}

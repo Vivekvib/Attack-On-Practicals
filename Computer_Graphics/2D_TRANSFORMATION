@@ -1,0 +1,117 @@
+#include <iostream>
+#include <graphics.h>
+#include <cmath>
+#include <vector>
+using namespace std;
+// Define the Point structure to represent a point in 2D
+struct Point {
+    int x, y;
+};
+// Function to multiply two 3x3 matrices
+void multiplyMatrix(float m1[3][3], float m2[3][3], float result[3][3]) {
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            result[i][j] = 0;
+            for (int k = 0; k < 3; k++) {
+                result[i][j] += m1[i][k] * m2[k][j];
+            }
+        }
+    }
+}
+// Function to apply a transformation matrix on a point using homogeneous coordinates
+void applyTransformation(Point &p, float matrix[3][3]) {
+    float pt[3] = {p.x, p.y, 1};
+    float result[3] = {0};
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            result[i] += pt[j] * matrix[i][j];
+        }
+    }
+    p.x = result[0];
+    p.y = result[1];
+}
+// Function to draw a polygon
+void drawPolygon(vector<Point> polygon) {
+    for (int i = 0; i < polygon.size(); i++) {
+        int x1 = polygon[i].x, y1 = polygon[i].y;
+        int x2 = polygon[(i + 1) % polygon.size()].x, y2 = polygon[(i + 1) % polygon.size()].y;
+        line(x1, y1, x2, y2);
+    }
+}
+// Function to apply translation transformation
+void translate(vector<Point>& polygon, int tx, int ty) {
+    float translationMatrix[3][3] = {
+        {1, 0, tx},
+        {0, 1, ty},
+        {0, 0, 1}
+    };
+    for (auto& p : polygon) {
+        applyTransformation(p, translationMatrix);
+    }
+}
+// Function to apply scaling transformation
+void scale(vector<Point>& polygon, float sx, float sy) {
+    float scalingMatrix[3][3] = {
+        {sx, 0, 0},
+        {0, sy, 0},
+        {0, 0, 1}
+    };
+    for (auto& p : polygon) {
+        applyTransformation(p, scalingMatrix);
+    }
+}
+// Function to apply rotation transformation
+void rotate(vector<Point>& polygon, float angle) {
+    float rad = angle * M_PI / 180.0;  // Convert angle to radians
+    float rotationMatrix[3][3] = {
+        {cos(rad), -sin(rad), 0},
+        {sin(rad), cos(rad), 0},
+        {0, 0, 1}
+    };
+    for (auto& p : polygon) {
+        applyTransformation(p, rotationMatrix);
+    }
+}
+// Function to apply reflection (about x-axis) transformation
+void reflectX(vector<Point>& polygon) {
+    float reflectionMatrix[3][3] = {
+        {1, 0, 0},
+        {0, -1, 0},
+        {0, 0, 1}
+    };
+    for (auto& p : polygon) {
+        applyTransformation(p, reflectionMatrix);
+    }
+}
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    // Define a simple square polygon
+    vector<Point> polygon = {{100, 100}, {200, 100}, {200, 200}, {100, 200}};
+    // Draw the original polygon
+    setcolor(RED);
+    drawPolygon(polygon);
+    delay(1000);  // Wait for 1 second to view the original polygon
+    // Apply translation (move the polygon by 100 units right and 50 units down)
+    translate(polygon, 100, 50);
+    setcolor(GREEN);
+    drawPolygon(polygon);
+    delay(1000);  // Wait for 1 second to view the translated polygon
+    // Apply scaling (scale the polygon by 1.5 in x direction and 2 in y direction)
+    scale(polygon, 1.5, 2);
+    setcolor(BLUE);
+    drawPolygon(polygon);
+    delay(1000);  // Wait for 1 second to view the scaled polygon
+    // Apply rotation (rotate the polygon by 45 degrees)
+    rotate(polygon, 45);
+    setcolor(YELLOW);
+    drawPolygon(polygon);
+    delay(1000);  // Wait for 1 second to view the rotated polygon
+    // Apply reflection (reflect the polygon about the x-axis)
+    reflectX(polygon);
+    setcolor(WHITE);
+    drawPolygon(polygon);
+    delay(5000);  // Wait for 5 seconds to view the final polygon
+    closegraph();
+    return 0;
+}

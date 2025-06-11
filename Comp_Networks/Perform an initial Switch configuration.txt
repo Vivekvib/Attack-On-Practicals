@@ -1,0 +1,14 @@
+# Perform an initial Switch configuration
+
+1 2960 Router(Miscellaneous)
+Open CLI->Enable;Configure ter; hostname SW1;exit;exit;enable;
+config t;banner?;banner motd ?;banner motd $;
+************************************************
+
+Only Authorized Users Allowed
+
+************************************************
+$
+exit;exit;en;sh run;config t; line con 0; password Vivek@123; login;exit;
+enable secret Viva@123;exit;exit;
+copy run start

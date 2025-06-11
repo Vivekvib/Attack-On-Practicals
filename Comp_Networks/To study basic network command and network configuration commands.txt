@@ -1,0 +1,19 @@
+# To study basic network command and network configuration commands
+
+4: pc
+2: 2960 switch (Miscellaneous)
+1: 1941 Router (Network Devices)
+Connections will be done by Copper straight wire
+PC (Ethernert) to Switch (FastEthernet) 
+Switch (GigaBitEthernet) to Router (GigaBitEthernet)
+Router right click, open CLI tab, No, enable,
+Configure terminal,interface g0/0,ip address 192.168.1.1 255.255.255.0, no shutdown, exit
+interface g0/1,ip address 192.168.2.1 255.255.255.0, no shutdown
+PC right click, open Desktop, Open IP Configuration
+PC1:: Ipv4 Adress: 192.168.1.10 Default Gateway: 192.168.1.1
+PC2:: Ipv4 Adress: 192.168.1.11 Default Gateway: 192.168.1.1
+PC3:: Ipv4 Adress: 192.168.2.10 Default Gateway: 192.168.2.1
+PC4:: Ipv4 Adress: 192.168.2.11 Default Gateway: 192.168.2.1
+Fast Forward some time
+Send a simple message a PDU
+FROM PC to Router, PC to PC

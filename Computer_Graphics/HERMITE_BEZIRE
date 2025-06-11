@@ -1,0 +1,65 @@
+#include <iostream>
+#include <graphics.h>
+#include <cmath>
+#include <vector>
+using namespace std;
+// Function to draw a Hermite curve
+void drawHermiteCurve(int x0, int y0, int x1, int y1, int t0x, int t0y, int t1x, int t1y) {
+    // Define the number of segments
+    int segments = 100;
+    // Loop over the parameter t from 0 to 1
+    for (int i = 0; i <= segments; i++) {
+        float t = i / float(segments);
+        // Hermite curve formula
+        float h0 = 2*t*t*t - 3*t*t + 1;
+        float h1 = -2*t*t*t + 3*t*t;
+        float h2 = t*t*t - 2*t*t + t;
+        float h3 = t*t*t - t*t;
+        int x = h0 * x0 + h1 * x1 + h2 * t0x + h3 * t1x;
+        int y = h0 * y0 + h1 * y1 + h2 * t0y + h3 * t1y;
+        putpixel(x, y, WHITE);  // Plot the point
+    }
+}
+// Function to draw a Bezier curve (Cubic Bezier with 4 control points)
+void drawBezierCurve(int x0, int y0, int x1, int y1, int x2, int y2, int x3, int y3) {
+    // Define the number of segments
+    int segments = 100;
+    // Loop over the parameter t from 0 to 1
+    for (int i = 0; i <= segments; i++) {
+        float t = i / float(segments);
+        // Bezier curve formula using Bernstein polynomials
+        float b0 = pow(1 - t, 3);
+        float b1 = 3 * t * pow(1 - t, 2);
+        float b2 = 3 * pow(t, 2) * (1 - t);
+        float b3 = pow(t, 3);
+        int x = b0 * x0 + b1 * x1 + b2 * x2 + b3 * x3;
+        int y = b0 * y0 + b1 * y1 + b2 * y2 + b3 * y3;
+        putpixel(x, y, WHITE);  // Plot the point
+    }
+}
+int main() {
+    int gd = DETECT, gm;
+    initgraph(&gd, &gm, "");
+    // Define the control points for the Hermite curve
+    int x0 = 100, y0 = 300;  // Start point
+    int x1 = 500, y1 = 300;  // End point
+    int t0x = 150, t0y = 100;  // Tangent at the start point
+    int t1x = 150, t1y = 500;  // Tangent at the end point
+    // Draw the Hermite curve
+    setcolor(RED);
+    drawHermiteCurve(x0, y0, x1, y1, t0x, t0y, t1x, t1y);
+    delay(2000);  // Wait for 2 seconds
+    // Clear the screen for the Bezier curve
+    cleardevice();
+    // Define the control points for the Bezier curve
+    int x0b = 100, y0b = 500;
+    int x1b = 150, y1b = 100;
+    int x2b = 400, y2b = 100;
+    int x3b = 500, y3b = 500;
+    // Draw the Bezier curve
+    setcolor(GREEN);
+    drawBezierCurve(x0b, y0b, x1b, y1b, x2b, y2b, x3b, y3b);
+    delay(5000);  // Wait for 5 seconds to view the result
+    closegraph();
+    return 0;
+}
