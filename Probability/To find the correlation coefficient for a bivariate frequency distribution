@@ -1,0 +1,27 @@
+1. Prepare a 2D Table in Excel:
+  X-Class	  Y-Class	  Mid-X	  Mid-Y	  Frequency(f)  f·x	  f·y	  f·x²	  f·y²	  f·xy
+2. Fill Mid Values:
+  Calculate midpoint for each class interval:
+    Midpoint=(Lower Limit + Upper Limit)/2
+3. Calculate Columns:
+  Use Excel formulas:
+    =f * x
+    =f * y
+    =f * x * y
+    =f * x^2
+    =f * y^2
+4. Calculate Totals:
+  Use =SUM(range) to compute:
+    =sum(∑f,∑fx,∑fy,∑fxy,∑fx^2,∑fy^2)
+5. Apply the Pearson Formula to get r
+   1️) Add total row at the bottom:
+        Use =SUM(range) to calculate all the column totals.
+   2️) Assign cells:
+        Let’s assume:
+        N = in cell B10 → =SUM(C2:C9)
+        fx = D10, fy = E10
+        fx² = F10, fy² = G10
+        fxy = H10
+   3️) Enter this formula to calculate r:
+      =(B10*H10 - D10*E10) / SQRT((B10*F10 - D10^2)*(B10*G10 - E10^2))
+        Replace cell addresses (B10, H10, etc.) with your actual Excel cell references.
