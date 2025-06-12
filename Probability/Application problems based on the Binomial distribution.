@@ -1,0 +1,8 @@
+1. Choose Real-life Problems (examples below):
+  Tossing a coin 10 times: Probability of getting exactly 6 heads.
+  In a batch of 20 products, with 5% defective rate, find probability of getting exactly 2 defectives.
+  A student has 70% chance of passing each test. What’s the probability they pass 3 out of 4 tests?
+2. Set Up Excel Table:
+  Column A: Number of successes x
+  Column B: Use the BINOM.DIST formula:
+  =BINOM.DIST(x, n, p, TRUE)
