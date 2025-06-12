@@ -1,0 +1,9 @@
+1. Choose Real-life Problems (examples below):
+  Number of emails received per hour.
+  Number of customer arrivals in a shop per minute.
+  Number of printing errors per page in a book.
+2. Set Up Excel Table:
+  Column A: Values of x (number of events)
+  Column B: Use the POISSON.DIST function:
+    =POISSON.DIST(x, λ, FALSE) for exact probability
+    =POISSON.DIST(x, λ, TRUE) for cumulative probability
