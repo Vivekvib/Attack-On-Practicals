@@ -1,0 +1,20 @@
+1. Bernoulli Distribution (p = 0.3):
+  Use:
+  =IF(RAND() < 0.3, 1, 0)
+  RAND() generates a random number between 0 and 1.
+  If it's less than 0.3 (30% chance), output is 1; else 0.
+  -> Generate 100 values using =IF(RAND() < p, 1, 0) and plot a bar chart of counts.
+
+2. Binomial Distribution (n = 10, p = 0.5):
+  Use:
+  =BINOM.INV(10, 0.5, RAND())
+  or simulate manually using:
+  =BINOM.DIST(number_s, 10, 0.5, FALSE)
+  -> Generate values in a column and plot their frequency.
+
+3. Poisson Distribution (λ = 4):
+  Use:
+  =POISSON.DIST(x, 4, FALSE)
+  But to generate random Poisson-distributed values, use:
+  =POISSON.INV(RAND(), 4)
+  -> Generate 100 values and use a column chart to display the result.
