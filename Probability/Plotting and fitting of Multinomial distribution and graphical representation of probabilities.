@@ -1,0 +1,15 @@
+1. Define the Problem:
+    Select the number of categories (e.g., 3 outcomes: A, B, C).
+    Choose the number of trials n (e.g., 10).
+    Assign probabilities p1, p2, p3 such that:
+      p1 + p2 + p3 = 1
+2. Set Up Excel Table:
+    List all valid outcome combinations for the number of trials (you can use only a few combinations for simplicity).
+    Example: (A=5, B=3, C=2), (A=4, B=4, C=2), etc.
+    For each combination, compute the Multinomial probability:
+    Formula (manual using Excel):​
+    In Excel, you can use:
+    =FACT(n)/(FACT(x1)*FACT(x2)*FACT(x3)) * p1^x1 * p2^x2 * p3^x3
+3. Plot the Graph:
+    Use a bar chart to show different combinations and their probabilities.
+    Alternatively, use a 3D pie chart to show the proportion of each category in one outcome.
