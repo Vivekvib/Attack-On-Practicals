@@ -1,0 +1,14 @@
+1. Understand the Parameters:
+    μ (mu) = mean of the distribution (e.g., 50)
+    σ (sigma) = standard deviation (e.g., 10)
+2. Set Up Excel Table:
+    Column A: Values of x from (μ − 3σ) to (μ + 3σ)
+    Example: From 20 to 80 if μ = 50, σ = 10
+    Column B: Use the NORM.DIST function:
+      =NORM.DIST(x, μ, σ, FALSE)
+3. Plot the Graph:
+    Use a line chart to show the smooth bell-shaped curve.
+    X-axis: Values of x
+    Y-axis: Probability Density f(x)
+    Add Chart Title: “Normal Distribution (μ = ..., σ = ...)”
+    Label axes appropriately.
