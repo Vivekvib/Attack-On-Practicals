@@ -1,0 +1,26 @@
+A.Exponential Distribution CDF
+  1. Parameters:
+    λ (lambda) = rate parameter (e.g., 0.5)
+  2. Set Up Excel Table:
+    Column A: Values of x from 0 to 10 (intervals of 1 or 0.5)
+    Column B: Use Excel formula:
+      =EXPON.DIST(x, λ, TRUE)
+  3. Plot the Graph:
+    Use a line chart:
+      X-axis: x
+      Y-axis: CDF value F(x)
+    The curve will start at 0 and gradually approach 1.
+
+ B. Normal Distribution CDF
+  1. Parameters:
+    μ (mean) = 50
+    σ (standard deviation) = 10
+  2. Set Up Excel Table:
+    Column A: Values of x from 20 to 80 (to cover ±3σ range)
+    Column B: Use Excel formula:
+      =NORM.DIST(x, μ, σ, TRUE)
+  3. Plot the Graph:
+    Use a line chart:
+      X-axis: x
+      Y-axis: CDF value F(x)
+    The curve will be S-shaped (sigmoid) and will go from near 0 to 1.
