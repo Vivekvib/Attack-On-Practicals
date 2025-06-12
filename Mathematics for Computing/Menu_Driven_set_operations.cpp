@@ -1,5 +1,4 @@
 #include <iostream>
-#include <set>
 #include <cmath>
 using namespace std;
 
@@ -60,7 +59,6 @@ public:
     SET unionSet(const SET &other) const {
         SET result;
         result.size = 0;
-
         for (int i = 0; i < size; i++)
             result.arr[result.size++] = arr[i];
 
@@ -130,12 +128,13 @@ public:
 };
 
 // -------------------------
-// Sample usage in main()
+// Main menu-driven logic
 // -------------------------
 int main() {
     SET A, B, U;
+    int choice;
 
-    int u_size, a_size, b_size;
+    int a_size, b_size, u_size;
 
     cout << "Enter size of Universal Set: ";
     cin >> u_size;
@@ -149,36 +148,87 @@ int main() {
     cin >> b_size;
     B.input(b_size);
 
-    cout << "\nSet A: ";
-    A.display();
+    do {
+        cout << "\n----- MENU -----\n";
+        cout << "1. Check membership (in A)\n";
+        cout << "2. Display Power Set of A\n";
+        cout << "3. Check if A is subset of B\n";
+        cout << "4. Union of A and B\n";
+        cout << "5. Intersection of A and B\n";
+        cout << "6. Complement of A\n";
+        cout << "7. Set Difference (A - B, B - A)\n";
+        cout << "8. Symmetric Difference (A Δ B)\n";
+        cout << "9. Cartesian Product (A × B)\n";
+        cout << "10. Display Sets\n";
+        cout << "0. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
 
-    cout << "Set B: ";
-    B.display();
+        switch (choice) {
+            case 1: {
+                int x;
+                cout << "Enter element to check in A: ";
+                cin >> x;
+                cout << (A.ismember(x) ? "Yes" : "No") << endl;
+                break;
+            }
+            case 2:
+                A.powerset();
+                break;
 
-    cout << "\nIs 3 in A? " << (A.ismember(3) ? "Yes" : "No") << endl;
+            case 3:
+                cout << (A.subset(B) ? "A is a subset of B" : "A is not a subset of B") << endl;
+                break;
 
-    cout << "\nPower Set of A:\n";
-    A.powerset();
+            case 4:
+                cout << "A ∪ B = ";
+                A.unionSet(B).display();
+                break;
 
-    cout << "\nIs A subset of B? " << (A.subset(B) ? "Yes" : "No") << endl;
+            case 5:
+                cout << "A ∩ B = ";
+                A.intersectionSet(B).display();
+                break;
 
-    cout << "\nA ∪ B = ";
-    A.unionSet(B).display();
+            case 6:
+                cout << "Complement of A = ";
+                A.complement(U).display();
+                break;
 
-    cout << "A ∩ B = ";
-    A.intersectionSet(B).display();
+            case 7:
+                cout << "A - B = ";
+                A.difference(B).display();
+                cout << "B - A = ";
+                B.difference(A).display();
+                break;
 
-    cout << "Complement of A = ";
-    A.complement(U).display();
+            case 8:
+                cout << "A Δ B = ";
+                A.symmetricDifference(B).display();
+                break;
 
-    cout << "A - B = ";
-    A.difference(B).display();
+            case 9:
+                A.cartesianProduct(B);
+                break;
 
-    cout << "Symmetric Difference (A Δ B) = ";
-    A.symmetricDifference(B).display();
+            case 10:
+                cout << "Set A: ";
+                A.display();
+                cout << "Set B: ";
+                B.display();
+                cout << "Universal Set: ";
+                U.display();
+                break;
 
-    cout << "\nA × B:\n";
-    A.cartesianProduct(B);
+            case 0:
+                cout << "Exiting...\n";
+                break;
+
+            default:
+                cout << "Invalid choice!\n";
+        }
+
+    } while (choice != 0);
 
     return 0;
 }
