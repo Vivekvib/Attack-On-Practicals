@@ -1,0 +1,15 @@
+1. Understand the Parameters:
+    p = probability of success in each trial.
+    Example: p = 0.3
+    x = trial number on which the first success occurs (e.g., from 1 to 10).
+2. Set Up Excel Table:
+    Column A: Values of x from 1 to 10 (or more).
+    Column B: Use the GEOME.DIST function in Excel:
+      =GEOME.DIST(x, p, FALSE)
+3. Plot the Graph:
+    Insert a bar chart with:
+    X-axis: Trial number x
+    Y-axis: Probability P(X = x)
+    Label your chart properly:
+    Title: “Geometric Distribution (p = …)”
+    Axes: Trial number, Probability
