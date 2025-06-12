@@ -1,0 +1,5 @@
+1. Enter Your Data:
+    Column A: Variable X (e.g., Hours Studied)
+    Column B: Variable Y (e.g., Marks Scored)
+    At least 10 pairs recommended
+2. Use Excel’s Function:=CORREL(array1, array2)
