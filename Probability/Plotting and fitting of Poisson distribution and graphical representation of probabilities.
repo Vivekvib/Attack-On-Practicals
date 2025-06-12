@@ -1,0 +1,14 @@
+1. Understand the Parameters:
+    Poisson distribution has one parameter:
+    λ (lambda) = average number of occurrences in a given interval.
+    Example: λ = 4
+2. Create a Table in Excel:
+    Column A: Values of x (number of occurrences) from 0 to a reasonable upper limit (e.g., 10 or 15).
+    Column B: Use the POISSON.DIST function in Excel:
+      =POISSON.DIST(x, λ, FALSE)
+3. Plot the Graph:
+    Use a bar chart to display the distribution:
+    X-axis: Number of occurrences (x)
+    Y-axis: Probability P(X = x)
+    Label the chart clearly with title:
+    “Poisson Distribution (λ = ...)”
