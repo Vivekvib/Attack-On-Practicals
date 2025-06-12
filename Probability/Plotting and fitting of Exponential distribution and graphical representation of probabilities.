@@ -1,0 +1,15 @@
+1.Understand the Parameter:
+  The Exponential Distribution has a rate parameter λ (lambda) which represents the rate of occurrence.
+  The probability density function (PDF) is:
+  f(x)=λ⋅e^(−λx),x≥0
+2. Set Up Excel Table:
+  Column A: Values of x from 0 to, say, 10 (interval of 0.5 or 1).
+  Column B: Use the EXPON.DIST function in Excel:
+  =EXPON.DIST(x, λ, FALSE)
+  For cumulative probabilities, use TRUE instead of FALSE.
+3. Plot the Graph:
+  Use a line chart for continuous distribution:
+  X-axis: Time or event spacing (x)
+  Y-axis: Probability density f(x)
+  Title: “Exponential Distribution (λ = …)”
+  Label axes: Time (x) and Probability Density f(x)
