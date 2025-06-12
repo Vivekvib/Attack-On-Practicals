@@ -1,0 +1,10 @@
+1. Collect or Simulate Data:
+    Create two columns (e.g., X = Hours Studied, Y = Marks Scored).
+    Enter at least 10 pairs of values.
+2. Create Scatter Plot in Excel:
+    Select both columns.
+    Insert → Charts → Scatter Plot.
+    Add chart title and axis labels.
+3. Calculate Covariance:
+    Use the formula:
+    =COVARIANCE.P(array1, array2)
