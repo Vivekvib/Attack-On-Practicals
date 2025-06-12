@@ -1,0 +1,14 @@
+A. Discrete Uniform Distribution
+  1. Define the Range:
+    Choose a set of equally likely outcomes.
+    Example: Values from 1 to 6 (like a fair die roll).
+  2. Create a Table in Excel:
+    Column A: List values from 1 to 6.
+    Column B: Since all outcomes are equally likely, probability for each =1/𝑛
+where n = number of values.
+For 6 outcomes:=1/6
+  3. Plot the Graph:
+    Use a bar chart:
+    X-axis: Outcome values
+    Y-axis: Probability
+    Label chart: “Discrete Uniform Distribution (e.g., Die Roll)”
