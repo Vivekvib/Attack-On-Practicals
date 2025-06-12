@@ -1,0 +1,12 @@
+1. Choose Real-life Problems (examples below):
+  Heights of students in a class.
+  IQ scores in a population.
+  Lifespan of light bulbs.
+2. Set Up Excel Table:
+  For a given X, μ, and σ, use:
+  =NORM.DIST(X, μ, σ, TRUE) to calculate P(X ≤ x)
+  To find P(a < X < b):
+    P(a<X<b)=NORM.DIST(b,μ,σ,TRUE)−NORM.DIST(a,μ,σ,TRUE)
+3. Optional Z-score Column:
+  Add a column to compute Z:
+  =(X - μ)/σ
