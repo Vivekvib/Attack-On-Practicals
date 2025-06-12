@@ -1,0 +1,22 @@
+1. Uniform Distribution (e.g., range 10 to 50)
+  Use:
+  =RAND() * (50 - 10) + 10
+  -> This generates a random decimal between 10 and 50.
+  ▶ Steps:
+  1) Fill 100+ cells with this formula.
+  2) Create bins (e.g., 10–20, 20–30, etc.)
+  3) Use COUNTIFS() to count values in each bin.
+  4) Insert a Histogram or Bar Chart to visualize distribution
+
+
+ 2. Normal Distribution (μ = 50, σ = 10)
+  Use:
+  =NORM.INV(RAND(), 50, 10)
+  -> This simulates a normally distributed value with:
+  Mean = 50
+  Standard Deviation = 10
+  ▶ Steps:
+  1) Fill down 100+ cells with this formula.
+  2) Create bin ranges (e.g., 20–30, 30–40...).
+  3) Count values in each bin.
+  4) Plot a Histogram to show bell-curve shape.
