@@ -1,1 +1,15 @@
-
+1. Choose Parameters:
+    Select values for:
+      n = number of trials (e.g., 10)
+      p = probability of success (e.g., 0.5)
+    Let x = 0 to n (possible number of successes)
+2. Create a Table:
+    Column A: Values of x from 0 to n.
+    Column B: Use the BINOM.DIST function in Excel:
+      =BINOM.DIST(x, n, p, FALSE)
+3. Plot the Graph:
+    Use a bar chart (Insert → Charts → Column Chart) to plot x (horizontal axis) vs probability (vertical axis).
+    Label axes: x (Number of Successes) and P(X=x).
+4. Add Visual Elements:
+    Title: “Binomial Distribution for n = ..., p = ...”
+    Gridlines and data labels for clarity.
