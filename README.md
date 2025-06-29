@@ -1,4 +1,4 @@
-Welcome to the ultimate collection of practicals and PYQs for BSc CS (Hons), DU!  
+## Welcome to the ultimate collection of practicals and PYQs for BSc CS (Hons), DU!  
 This repo includes:
 -🔸 Practicals Answers of all the courses
 -🔸 PYQs
