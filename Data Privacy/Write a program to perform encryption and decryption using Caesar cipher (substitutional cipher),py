@@ -1,0 +1,44 @@
+def caesar_cipher(text, shift, mode):
+    result = ""
+    if mode == 'decrypt':
+        shift = -shift
+    for char in text:
+        if char.isalpha():  # Check if the character is an alphabet letter
+            start = ord('a') if char.islower() else ord('A')
+            # Calculate the shifted position
+            shifted_pos = (ord(char) - start + shift) % 26
+            # Convert back to character
+            result += chr(start + shifted_pos)
+        else:
+            # If it's not a letter (e.g., space, punctuation), keep it as is
+            result += char
+    return result
+def main():
+    print("Caesar Cipher Program")
+    print("---------------------")
+    while True:
+        choice = input("Do you want to (e)ncrypt or (d)ecrypt? (e/d): ").lower()
+        if choice in ['e', 'd']:
+            break
+        else:
+            print("Invalid choice. Please enter 'e' or 'd'.")
+    message = input("Enter your message: ")
+    while True:
+        try:
+            key = int(input("Enter the shift key (a number): "))
+            break
+        except ValueError:
+            print("Invalid key. Please enter a whole number.")
+    if choice == 'e':
+        encrypted_message = caesar_cipher(message, key, 'encrypt')
+        print("\n--- Encryption ---")
+        print(f"Original Message:  {message}")
+        print(f"Encrypted Message: {encrypted_message}")
+    else:
+        decrypted_message = caesar_cipher(message, key, 'decrypt')
+        print("\n--- Decryption ---")
+        print(f"Original Message:  {message}")
+        print(f"Decrypted Message: {decrypted_message}")
+
+if __name__ == "__main__":
+    main()
