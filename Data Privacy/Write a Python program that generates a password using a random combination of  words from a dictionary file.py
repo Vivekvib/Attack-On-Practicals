@@ -1,76 +1,63 @@
-import secrets  # Use secrets for cryptographically strong random numbers
-import string
-import os
-DEFAULT_WORDS = [
-    "apple", "banana", "coffee", "dragon", "emerald", "forest",
-    "guitar", "hammer", "island", "jacket", "koala", "lemon",
-    "mountain", "ninja", "ocean", "pencil", "quartz", "robot",
-    "spider", "tiger", "umbrella", "violin", "wizard", "xenon",
-    "yellow", "zebra"
-]
-def load_word_list(dictionary_path="/usr/share/dict/words"):
-    word_list = []
-    if os.path.exists(dictionary_path):
-        try:
-            with open(dictionary_path, 'r') as f:
-                words_from_file = [line.strip() for line in f]
-                word_list = [
-                    word.lower() for word in words_from_file
-                    if 4 <= len(word) <= 8 and word.isalpha()
-                ]
-            if len(word_list) < 100:
-                print(f"Warning: Dictionary at {dictionary_path} was small or unsuitable. Using default list.")
-                word_list = DEFAULT_WORDS
-        except IOError as e:
-            print(f"Error reading {dictionary_path}: {e}. Using default list.")
-            word_list = DEFAULT_WORDS
-        except Exception as e:
-            print(f"An unexpected error occurred: {e}. Using default list.")
-            word_list = DEFAULT_WORDS
-    else:
-        print(f"Dictionary file not found at {dictionary_path}. Using default list.")
-        word_list = DEFAULT_WORDS
-    return word_list
+import random
+def load_words(file_path):
+    valid_words = []
+    try:
+        with open(file_path, 'r') as f:
+            for line in f:
+                word = line.strip().lower()
+                if word.isalpha() and len(word) >= 4:
+                    valid_words.append(word)
+        return valid_words
+    except (FileNotFoundError, IOError):
+        return []
+def create_fallback_dictionary(filename="words.txt"):
+    sample_words = [
+        "apple", "brave", "cactus", "cloud", "dragon", "eagle", "forest", "giant",
+        "house", "indigo", "jungle", "karma", "lemon", "mango", "noble", "ocean",
+        "piano", "quiet", "river", "solar", "tiger", "unity", "violet", "water",
+        "xenon", "yellow", "zebra", "battery", "horse", "staple", "correct"
+    ]
+    try:
+        with open(filename, 'w') as f:
+            f.write("\n".join(sample_words))
+        print(f"[Info] Created local dictionary file: {filename}")
+        return filename
+    except IOError as e:
+        print(f"[Error] Could not create fallback dictionary: {e}")
+        return None
+
 def generate_password(word_list, num_words=4, separator="-"):
     if not word_list:
-        print("Error: Word list is empty. Cannot generate password.")
         return None
-    chosen_words = [secrets.choice(word_list) for _ in range(num_words)]
-    password = separator.join(chosen_words)
-    return password
-def generate_stronger_password(word_list, num_words=3, separator="-"):
-    if not word_list:
-        print("Error: Word list is empty. Cannot generate password.")
-        return None
-    chosen_words = [secrets.choice(word_list) for _ in range(num_words)]
-    index_to_capitalize = secrets.randbelow(len(chosen_words))
-    chosen_words[index_to_capitalize] = chosen_words[index_to_capitalize].capitalize()
-    random_number = str(secrets.randbelow(100))
-    special_char = secrets.choice(string.punctuation)
-    password_parts = chosen_words + [random_number, special_char]
-    secrets.SystemRandom().shuffle(password_parts)
-    password = separator.join(password_parts)
-    return password
+    secure_rng = random.SystemRandom()
+    chosen_words = [secure_rng.choice(word_list) for _ in range(num_words)]
+    return separator.join(chosen_words)
 if __name__ == "__main__":
-    DICTIONARY_FILE_PATH = "/usr/share/dict/words"
-    WORDS_IN_PASSWORD = 4
-    SEPARATOR_CHAR = "-"
-    print(f"Attempting to load word list from: {DICTIONARY_FILE_PATH}\n")
-    words = load_word_list(DICTIONARY_FILE_PATH)
-    print(f"Loaded {len(words)} suitable words into memory.\n")
-    simple_password = generate_password(
-        words, 
-        num_words=WORDS_IN_PASSWORD, 
-        separator=SEPARATOR_CHAR
-    )
-    if simple_password:
-        print(f"Simple word-based password:")
-        print(f"  {simple_password}\n")
-    stronger_password = generate_stronger_password(
-        words, 
-        num_words=WORDS_IN_PASSWORD - 1, 
-        separator=SEPARATOR_CHAR
-    )
-    if stronger_password:
-        print(f"Stronger (XKCD-style) password:")
-        print(f"  {stronger_password}\n")
+    print("--- Dictionary-Based Password Generator ---")
+    candidate_paths = [
+        "/usr/share/dict/words",
+        "/usr/dict/words",
+        "words.txt" # Local fallback
+    ]    
+    words = []
+    for path in candidate_paths:
+        loaded_words = load_words(path)
+        if loaded_words:
+            words = loaded_words
+            print(f"[Info] Successfully loaded words from: {path}")
+            break
+    if not words:
+        print("[Info] No system dictionary found.")
+        fallback_path = create_fallback_dictionary()
+        if fallback_path:
+             words = load_words(fallback_path)
+    if words:
+        print(f"[Info] {len(words)} suitable words loaded.")
+        while True:
+            password = generate_password(words)
+            print(f"\nGenerated Password: {password}")
+            user_input = input("Generate another? (Y/n): ").strip().lower()
+            if user_input == 'n':
+                break
+    else:
+        print("[Error] Could not locate or create a dictionary file.")
