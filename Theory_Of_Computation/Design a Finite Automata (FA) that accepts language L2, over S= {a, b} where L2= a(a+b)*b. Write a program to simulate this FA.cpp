@@ -1,21 +1,15 @@
-#include <iostream> // For cout, cin, endl
-#include <string>   // For string
-#include <map>      // For map (to store the transition table)
-#include <set>      // For set (to store final states)
+#include <iostream>
+#include <string> 
+#include <map>    
+#include <set>    
 using namespace std;
-/**
- * @brief Simulates the DFA for the language L = a(a+b)*b
- * (Starts with 'a' and ends with 'b')
- * @param inputString The string to process.
- * @return true if the string is accepted, false otherwise.
- */
 bool simulateDFA(const string& inputString) {
     set<char> alphabet = {'a', 'b'};
     map<string, map<char, string>> transitions;
-    transitions["q0"] = {{'a', "q1"}, {'b', "q_dead"}}; // Start state
-    transitions["q1"] = {{'a', "q1"}, {'b', "q2"}};     // Started with 'a', ends in 'a'
-    transitions["q2"] = {{'a', "q1"}, {'b', "q2"}};     // Started with 'a', ends in 'b' (Accept)
-    transitions["q_dead"] = {{'a', "q_dead"}, {'b', "q_dead"}}; // Started with 'b' (Trap)
+    transitions["q0"] = {{'a', "q1"}, {'b', "q_dead"}};
+    transitions["q1"] = {{'a', "q1"}, {'b', "q2"}};    
+    transitions["q2"] = {{'a', "q1"}, {'b', "q2"}};    
+    transitions["q_dead"] = {{'a', "q_dead"}, {'b', "q_dead"}};
     string startState = "q0";
     set<string> finalStates = {"q2"};
     string currentState = startState;
@@ -55,12 +49,12 @@ int main() {
         "aaaaab",
         
         // Rejected
-        "a",       // Doesn't end in 'b'
-        "aa",      // Doesn't end in 'b'
-        "b",       // Doesn't start with 'a'
-        "ba",      // Doesn't start with 'a'
-        "bab",     // Doesn't start with 'a'
-        ""         // Empty string
+        "a",     
+        "aa",     
+        "b",     
+        "ba",   
+        "bab",    
+        ""       
     };
     int numTests = sizeof(testStrings) / sizeof(testStrings[0]);
     cout << "--- Running Test Cases ---" << endl;
