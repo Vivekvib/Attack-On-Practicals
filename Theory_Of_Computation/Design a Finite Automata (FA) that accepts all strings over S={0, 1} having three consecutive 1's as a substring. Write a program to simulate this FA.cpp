@@ -1,15 +1,9 @@
-#include <iostream> // For cout, cin, endl
-#include <string>   // For string
-#include <map>      // For map (to store the transition table)
-#include <set>      // For set (to store final states)
+#include <iostream> 
+#include <string> 
+#include <map> 
+#include <set>  
 
 using namespace std;
-
-/**
- * @brief Simulates the DFA for the language of strings containing "111".
- * @param inputString The string to process.
- * @return true if the string is accepted, false otherwise.
- */
 bool simulateDFA(const string& inputString) {
     set<char> alphabet = {'0', '1'};
     map<string, map<char, string>> transitions;
@@ -45,14 +39,14 @@ bool simulateDFA(const string& inputString) {
 }
 int main() {
     string testStrings[] = {
-        "101010",       // Rejected
-        "11011",        // Rejected
-        "0011101",      // Accepted
-        "111",          // Accepted
-        "0111",         // Accepted
-        "1111",         // Accepted
-        "10111",        // Accepted
-        "1"             // Rejected
+        "101010",     
+        "11011",       
+        "0011101",     
+        "111",         
+        "0111",       
+        "1111",        
+        "10111",       
+        "1"            
     };
     int numTests = sizeof(testStrings) / sizeof(testStrings[0]);
     cout << "--- Running Test Cases ---" << endl;
