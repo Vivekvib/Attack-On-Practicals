@@ -1,14 +1,8 @@
-#include <iostream> // For cout, cin, endl
-#include <string>   // For string
-#include <map>      // For map (to store the transition table)
-#include <set>      // For set (to store final states)
+#include <iostream> 
+#include <string>   
+#include <map>      
+#include <set>      
 using namespace std;
-/**
- * @brief Simulates the DFA for the "EVEN-EVEN" language
- * (Even 'a's and Even 'b's)
- * @param inputString The string to process.
- * @return true if the string is accepted, false otherwise.
- */
 bool simulateDFA(const string& inputString) {
     set<char> alphabet = {'a', 'b'};
     map<string, map<char, string>> transitions;
@@ -43,18 +37,18 @@ bool simulateDFA(const string& inputString) {
 int main() {
     string testStrings[] = {
         // Accepted
-        "",         // 0 'a's, 0 'b's (Even, Even)
-        "aa",       // 2 'a's, 0 'b's (Even, Even)
-        "bb",       // 0 'a's, 2 'b's (Even, Even)
-        "abab",     // 2 'a's, 2 'b's (Even, Even)
-        "aabb",     // 2 'a's, 2 'b's (Even, Even)
-        "bbaabbaa", // 4 'a's, 4 'b's (Even, Even)
+        "",        
+        "aa",      
+        "bb",       
+        "abab",    
+        "aabb",    
+        "bbaabbaa", 
         // Rejected
-        "a",        // 1 'a', 0 'b's (Odd, Even)
-        "b",        // 0 'a's, 1 'b' (Even, Odd)
-        "ab",       // 1 'a', 1 'b' (Odd, Odd)
-        "aaa",      // 3 'a's, 0 'b's (Odd, Even)
-        "abb"       // 1 'a', 2 'b's (Odd, Even)
+        "a",       
+        "b",       
+        "ab",     
+        "aaa",    
+        "abb"      
     };
     int numTests = sizeof(testStrings) / sizeof(testStrings[0]);
     cout << "--- Running Test Cases ---" << endl;
