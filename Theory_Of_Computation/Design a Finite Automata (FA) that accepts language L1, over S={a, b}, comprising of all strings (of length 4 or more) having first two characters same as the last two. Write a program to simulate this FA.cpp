@@ -1,14 +1,9 @@
-#include <iostream> // For cout, cin, endl
-#include <string>   // For string
-#include <map>      // For map (to store the transition table)
-#include <set>      // For set (to store final states)
+#include <iostream> 
+#include <string>   
+#include <map>     
+#include <set>     
 using namespace std;
-/**
- * @brief Simulates the DFA for the language L = {w | |w| >= 4 and w1w2 = w(n-1)wn}
- * @param inputString The string to process.
- * @return true if the string is accepted, false otherwise.
- */
-bool simulateDFA(const string& inputString) {
+teDFA(const string& inputString) {
     set<char> alphabet = {'a', 'b'};
     map<string, map<char, string>> transitions;
     transitions["q0"] = {{'a', "S_a"}, {'b', "S_b"}};
@@ -18,19 +13,19 @@ bool simulateDFA(const string& inputString) {
     transitions["S_ab"] = {{'a', "S_ab_L3a"}, {'b', "S_ab_L3b"}};
     transitions["S_ba"] = {{'a', "S_ba_L3a"}, {'b', "S_ba_L3b"}};
     transitions["S_bb"] = {{'a', "S_bb_L3a"}, {'b', "S_bb_L3b"}};
-    transitions["S_aa_L3a"] = {{'a', "S_aa_AA"}, {'b', "S_aa_AB"}}; // "aaa" -> "aaaa"(AA) or "aaab"(AB)
-    transitions["S_aa_L3b"] = {{'a', "S_aa_BA"}, {'b', "S_aa_BB"}}; // "aab" -> "aaba"(BA) or "aabb"(BB)
-    transitions["S_ab_L3a"] = {{'a', "S_ab_AA"}, {'b', "S_ab_AB"}}; // "aba" -> "abaa"(AA) or "abab"(AB)
-    transitions["S_ab_L3b"] = {{'a', "S_ab_BA"}, {'b', "S_ab_BB"}}; // "abb" -> "abba"(BA) or "abbb"(BB)
-    transitions["S_ba_L3a"] = {{'a', "S_ba_AA"}, {'b', "S_ba_AB"}}; // "baa" -> "baaa"(AA) or "baab"(AB)
-    transitions["S_ba_L3b"] = {{'a', "S_ba_BA"}, {'b', "S_ba_BB"}}; // "bab" -> "baba"(BA) or "babb"(BB)
-    transitions["S_bb_L3a"] = {{'a', "S_bb_AA"}, {'b', "S_bb_AB"}}; // "bba" -> "bbaa"(AA) or "bbab"(AB)
-    transitions["S_bb_L3b"] = {{'a', "S_bb_BA"}, {'b', "S_bb_BB"}}; // "bbb" -> "bbba"(BA) or "bbbb"(BB)
+    transitions["S_aa_L3a"] = {{'a', "S_aa_AA"}, {'b', "S_aa_AB"}};
+    transitions["S_aa_L3b"] = {{'a', "S_aa_BA"}, {'b', "S_aa_BB"}};
+    transitions["S_ab_L3a"] = {{'a', "S_ab_AA"}, {'b', "S_ab_AB"}}; 
+    transitions["S_ab_L3b"] = {{'a', "S_ab_BA"}, {'b', "S_ab_BB"}};
+    transitions["S_ba_L3a"] = {{'a', "S_ba_AA"}, {'b', "S_ba_AB"}}; 
+    transitions["S_ba_L3b"] = {{'a', "S_ba_BA"}, {'b', "S_ba_BB"}}; 
+    transitions["S_bb_L3a"] = {{'a', "S_bb_AA"}, {'b', "S_bb_AB"}}; 
+    transitions["S_bb_L3b"] = {{'a', "S_bb_BA"}, {'b', "S_bb_BB"}}; 
     // The logic is: S_xx_YZ on 'c' -> S_xx_Zc
-    transitions["S_aa_AA"] = {{'a', "S_aa_AA"}, {'b', "S_aa_AB"}}; // Ends "aa" -> "aa" or "ab"
-    transitions["S_aa_AB"] = {{'a', "S_aa_BA"}, {'b', "S_aa_BB"}}; // Ends "ab" -> "ba" or "bb"
-    transitions["S_aa_BA"] = {{'a', "S_aa_AA"}, {'b', "S_aa_AB"}}; // Ends "ba" -> "aa" or "ab"
-    transitions["S_aa_BB"] = {{'a', "S_aa_BA"}, {'b', "S_aa_BB"}}; // Ends "bb" -> "ba" or "bb"
+    transitions["S_aa_AA"] = {{'a', "S_aa_AA"}, {'b', "S_aa_AB"}};
+    transitions["S_aa_AB"] = {{'a', "S_aa_BA"}, {'b', "S_aa_BB"}};
+    transitions["S_aa_BA"] = {{'a', "S_aa_AA"}, {'b', "S_aa_AB"}}; 
+    transitions["S_aa_BB"] = {{'a', "S_aa_BA"}, {'b', "S_aa_BB"}}; 
     transitions["S_ab_AA"] = {{'a', "S_ab_AA"}, {'b', "S_ab_AB"}};
     transitions["S_ab_AB"] = {{'a', "S_ab_BA"}, {'b', "S_ab_BB"}};
     transitions["S_ab_BA"] = {{'a', "S_ab_AA"}, {'b', "S_ab_AB"}};
@@ -86,19 +81,19 @@ int main() {
         "a",
         "aa",
         "aba",
-        "aaaa",     // aa == aa
-        "abab",     // ab == ab
-        "baba",     // ba == ba
-        "bbbb",     // bb == bb
-        "aaab",     // aa != ab
-        "bbaa",     // bb != aa
-        "abba",     // ab != ba
-        "aabaa",    // aa == aa
-        "babbb",    // bb == bb
-        "babab",    // ab != ab ... oh wait, prefix "ba", suffix "ab". REJECT
-        "bababa",   // ba == ba
-        "bbaba",    // bb != ba
-        "aaaaa"     // aa == aa
+        "aaaa",   
+        "abab",    
+        "baba",   
+        "bbbb",    
+        "aaab",   
+        "bbaa",   
+        "abba",   
+        "aabaa",  
+        "babbb",   
+        "babab",   
+        "bababa", 
+        "bbaba",  
+        "aaaaa"   
     };
     int numTests = sizeof(testStrings) / sizeof(testStrings[0]);
     cout << "--- Running Test Cases ---" << endl;
