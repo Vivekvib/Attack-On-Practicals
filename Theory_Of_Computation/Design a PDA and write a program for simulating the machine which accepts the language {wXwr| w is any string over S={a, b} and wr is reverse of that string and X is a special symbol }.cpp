@@ -1,120 +1,97 @@
 #include <iostream>
 #include <string>
-#include <stack> // For the stack data structure
-
-// Use the standard namespace
+#include <vector>
+#include <stack>
 using namespace std;
-
-/**
- * @brief Simulates the PDA for the language L = {wXw^r | w is in {a, b}*}
- * @param s The input string to check.
- * @return true if the string is in the language, false otherwise.
- */
-bool isAcceptedPalindrome(string s) {
-    stack<char> st;
-    int currentState = 0; // Represents state q0
-
-    // --- Transition 1: δ(q0, ε, ε) -> (q1, Z) ---
-    st.push('Z'); // Push stack-bottom marker
-    currentState = 1; // Move to state q1
-
-    int stringIndex = 0; // To iterate through the input string
-
-    // Loop through each character of the string
-    while (stringIndex < s.length()) {
-        char inputChar = s[stringIndex];
-
-        if (currentState == 1) { // State q1: Pushing w
-            if (inputChar == 'a') {
-                // --- Transition 2: δ(q1, a, Y) -> (q1, aY) ---
-                st.push('a');
-                stringIndex++;
-            } else if (inputChar == 'b') {
-                // --- Transition 3: δ(q1, b, Y) -> (q1, bY) ---
-                st.push('b');
-                stringIndex++;
-            } else if (inputChar == 'X') {
-                // --- Transition 4: δ(q1, X, Y) -> (q2, Y) ---
-                // Do nothing to the stack, just change state
-                currentState = 2; // Move to state q2
-                stringIndex++;
-            } else {
-                // Invalid character in this state
-                return false;
-            }
-        } else if (currentState == 2) { // State q2: Popping for w^r
-            if (inputChar == 'a') {
-                // --- Transition 5: δ(q2, a, a) -> (q2, ε) ---
-                if (!st.empty() && st.top() == 'a') {
-                    st.pop(); // Pop the matching 'a'
-                    stringIndex++;
-                } else {
-                    // Mismatch! (e.g., "aXb") or stack empty
-                    return false;
-                }
-            } else if (inputChar == 'b') {
-                // --- Transition 6: δ(q2, b, b) -> (q2, ε) ---
-                if (!st.empty() && st.top() == 'b') {
-                    st.pop(); // Pop the matching 'b'
-                    stringIndex++;
-                } else {
-                    // Mismatch! (e.g., "bXa") or stack empty
-                    return false;
-                }
-            } else {
-                // Invalid character in this state (e.g., "aXaX")
-                return false;
-            }
+class PDA {
+private:
+    enum State {
+        q0,
+        q1,
+        q2,
+        q_reject
+    };
+    string getStateName(State s) {
+        switch(s) {
+            case q0: return "q0 (Pushing w)";
+            case q1: return "q1 (Matching w^R)";
+            case q2: return "q2 (Accept)";
+            default: return "Reject";
         }
     }
-
-    // --- After the string is fully read ---
-    // We are now checking for ε transitions.
-
-    // If we are still in state q1, it means we never saw an 'X'.
-    if (currentState == 1) {
-        return false;
-    }
-
-    // If we are in state q2, we check for the final transition
-    if (currentState == 2) {
-        // --- Transition 7: δ(q2, ε, Z) -> (q3, ε) ---
-        if (!st.empty() && st.top() == 'Z') {
-            st.pop(); // Pop 'Z'
-            currentState = 3; // Move to final state q3
+public:
+    bool simulate(string input) {
+        State currentState = q0;
+        stack<char> st;
+        st.push('Z');
+        cout << "\n--------------------------------------------------" << endl;
+        cout << "Processing: \"" << input << "\"" << endl;
+        cout << "Init: State " << getStateName(currentState) << ", Stack: [Z]" << endl;
+        for (char inputChar : input) {
+            char stackTop = st.top();
+            switch (currentState) {
+                case q0:
+                    if (inputChar == 'a' || inputChar == 'b') {
+                        st.push(inputChar);
+                        cout << "  Input '" << inputChar << "' -> Push '" << inputChar << "', Stay q0" << endl;
+                    } 
+                    else if (inputChar == 'X') {
+                        currentState = q1;
+                        cout << "  Input 'X' -> Switch to Matching Mode (Goto q1)" << endl;
+                    }
+                    else {
+                        currentState = q_reject;
+                        cout << "  Input '" << inputChar << "' -> Reject (Invalid char)" << endl;
+                    }
+                    break;
+                case q1:
+                    if (stackTop == 'Z') {
+                        currentState = q_reject;
+                        cout << "  Input '" << inputChar << "', Stack Empty -> Reject (Length mismatch)" << endl;
+                    } 
+                    else if (inputChar == stackTop) {
+                        st.pop();
+                        cout << "  Input '" << inputChar << "' == Stack Top '" << stackTop << "' -> Pop, Stay q1" << endl;
+                    } 
+                    else {
+                        currentState = q_reject;
+                        cout << "  Input '" << inputChar << "' != Stack Top '" << stackTop << "' -> Reject (Mismatch)" << endl;
+                    }
+                    break;
+                case q2:
+                case q_reject:
+                    break;
+            }
+            if (currentState == q_reject) break;
+        }
+        if (currentState == q1 && st.top() == 'Z') {
+            currentState = q2;
+            cout << "  End of Input, Stack Empty -> Goto q2 (Accept)" << endl;
+        }
+        cout << "Final State: " << getStateName(currentState) << endl;
+        if (currentState == q2) {
+            cout << "Result: ACCEPTED" << endl;
+            return true;
         } else {
-            // We are in state q2, but the stack top is not 'Z'.
-            // This means w was longer than w^r (e.g., "abXa").
+            if (currentState == q0) cout << "Reason: 'X' symbol missing." << endl;
+            else if (!st.empty() && st.top() != 'Z') cout << "Reason: Stack not empty (Input too short)." << endl;
+            else if (currentState == q_reject) cout << "Reason: Mismatch or invalid character." << endl;
+            cout << "Result: REJECTED" << endl;
             return false;
         }
     }
-
-    // The string is accepted if AND ONLY IF we are in state q3
-    // AND the stack is now empty.
-    return (currentState == 3 && st.empty());
-}
-
-// Main function to drive the simulation
+};
 int main() {
-    cout << "--- PDA Simulator for L = {wXw^r} ---" << endl;
-    cout << "Enter 'q' to quit." << endl;
-
+    PDA pda;
+    cout << "=== PDA Simulator ===" << endl;
+    cout << "Language: { wXw^R | w in {a,b}* }" << endl;
+    cout << "Examples: aXa, abXba, abbXbba, X (empty w)" << endl;
     string input;
     while (true) {
-        cout << "\nEnter a string (using a, b, X): ";
+        cout << "\nEnter string (or 'exit'): ";
         cin >> input;
-
-        if (input == "q") {
-            break;
-        }
-
-        if (isAcceptedPalindrome(input)) {
-            cout << "Result: ACCEPTED" << endl;
-        } else {
-            cout << "Result: REJECTED" << endl;
-        }
+        if (input == "exit") break;
+        pda.simulate(input);
     }
-
-    cout << "Exiting simulator." << endl;
     return 0;
 }
