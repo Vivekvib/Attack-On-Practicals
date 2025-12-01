@@ -1,76 +1,77 @@
 #include <iostream>
-#include <string> 
-#include <map>    
-#include <set>    
+#include <string>
+#include <vector>
 using namespace std;
-bool simulateDFA(const string& inputString) {
-    set<char> alphabet = {'a', 'b'};
-    map<string, map<char, string>> transitions;
-    transitions["q0"] = {{'a', "q1"}, {'b', "q_dead"}};
-    transitions["q1"] = {{'a', "q1"}, {'b', "q2"}};    
-    transitions["q2"] = {{'a', "q1"}, {'b', "q2"}};    
-    transitions["q_dead"] = {{'a', "q_dead"}, {'b', "q_dead"}};
-    string startState = "q0";
-    set<string> finalStates = {"q2"};
-    string currentState = startState;
-    cout << "Input: '" << inputString << "'" << endl;
-    if (inputString.empty()) {
-        cout << "Finished processing. Final state is: " << currentState << endl;
-        cout << "Result: Rejected\n" << endl;
-        return false;
+class DFA {
+private:
+    enum StateID {
+        S_START = 0,
+        S_ENDS_A = 1,
+        S_ENDS_B = 2, 
+        S_DEAD = 3, 
+        TOTAL_STATES = 4
+    };
+    vector<vector<int>> transitionTable;
+    vector<bool> finalStates;
+    vector<string> stateDescriptions;
+public:
+    DFA() {
+        transitionTable.resize(TOTAL_STATES, vector<int>(2));
+        finalStates.resize(TOTAL_STATES, false);
+        stateDescriptions.resize(TOTAL_STATES);
+        setupDFA();
     }
-    for (char symbol : inputString) {
-        // Check for invalid symbols
-        if (alphabet.find(symbol) == alphabet.end()) {
-            cerr << "Error: Symbol '" << symbol << "' is not in the alphabet {a, b}" << endl;
-            cout << "Result: Rejected\n" << endl;
+    void setupDFA() {
+        stateDescriptions[S_START] = "Start (q0)";
+        stateDescriptions[S_ENDS_A] = "Ends in 'a' (q1)";
+        stateDescriptions[S_ENDS_B] = "Ends in 'b' (q2)";
+        stateDescriptions[S_DEAD]  = "Dead State (Trap)";
+        addTransition(S_START, S_ENDS_A, S_DEAD););
+        addTransition(S_ENDS_B, S_ENDS_A, S_ENDS_B);
+        addTransition(S_DEAD, S_DEAD, S_DEAD);
+        finalStates[S_ENDS_B] = true;
+    }
+    void addTransition(int from, int toA, int toB) {
+        transitionTable[from][0] = toA; // Input 'a'
+        transitionTable[from][1] = toB; // Input 'b'
+    }
+    bool simulate(string input) {
+        int currentState = S_START;
+        cout << "\n--------------------------------------------------" << endl;
+        cout << "Processing: \"" << input << "\"" << endl;
+        cout << "Start: " << stateDescriptions[currentState] << endl;
+        for (char c : input) {
+            if (c != 'a' && c != 'b') {
+                cout << "Error: Invalid char '" << c << "'. Alphabet is {a, b}." << endl;
+                return false;
+            }
+            int inputIdx = (c == 'a') ? 0 : 1;
+            int nextState = transitionTable[currentState][inputIdx];
+            cout << "  Input '" << c << "' -> " << stateDescriptions[nextState] << endl;
+            currentState = nextState;
+        }
+        cout << "End State: " << stateDescriptions[currentState] << endl;
+        if (finalStates[currentState]) {
+            cout << "Result: ACCEPTED (Starts with 'a', ends with 'b')" << endl;
+            return true;
+        } else {
+            cout << "Result: REJECTED" << endl;
             return false;
         }
-        string nextState = transitions[currentState][symbol];
-        cout << "Read '" << symbol << "', transition " << currentState << " -> " << nextState << endl;
-        currentState = nextState;
     }
-    bool isAccepted = (finalStates.find(currentState) != finalStates.end());
-    cout << "Finished processing. Final state is: " << currentState << endl;
-    if (isAccepted) {
-        cout << "Result: Accepted\n" << endl;
-    } else {
-        cout << "Result: Rejected\n" << endl;
-    }
-    return isAccepted;
-}
+};
 int main() {
-    string testStrings[] = {
-        // Accepted
-        "ab",
-        "aab",
-        "abb",
-        "abab",
-        "aaaaab",
-        
-        // Rejected
-        "a",     
-        "aa",     
-        "b",     
-        "ba",   
-        "bab",    
-        ""       
-    };
-    int numTests = sizeof(testStrings) / sizeof(testStrings[0]);
-    cout << "--- Running Test Cases ---" << endl;
-    for (int i = 0; i < numTests; ++i) {
-        simulateDFA(testStrings[i]);
-    }
-    cout << "--- Interactive Mode ---" << endl;
-    cout << "Enter 'exit' to quit." << endl;
-    string userInput;
+    DFA dfa;
+    cout << "=== DFA Simulator ===" << endl;
+    cout << "Language: L2 = a(a+b)*b" << endl;
+    cout << "Regex logic: Starts with 'a', ends with 'b'." << endl;
+    cout << "Alphabet: {a, b}" << endl;
+    string input;
     while (true) {
-        cout << "Enter a string of 'a's and 'b's: ";
-        getline(cin, userInput);
-        if (userInput == "exit") {
-            break;
-        }
-        simulateDFA(userInput);
+        cout << "\nEnter string (or 'exit'): ";
+        cin >> input;
+        if (input == "exit") break;
+        dfa.simulate(input);
     }
     return 0;
 }
