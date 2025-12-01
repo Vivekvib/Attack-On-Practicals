@@ -3,15 +3,15 @@
 using namespace std;
 const int Q0_SCAN_RIGHT = 0;
 const int Q1_CARRY = 1;
-const int Q_HALT = -1; // "Accept" state
-const int Q_REJECT = -2; // Not used in this TM, but good practice
+const int Q_HALT = -1; 
+const int Q_REJECT = -2;
 const char BLANK = 'B';
 bool runTMIncrement(string& s) {
     string tape = BLANK + s + "BBBBBBBBBB";
     int head = 1; 
-    int currentState = Q0_SCAN_RIGHT; // Start at q0
+    int currentState = Q0_SCAN_RIGHT;
     int steps = 0;
-    const int MAX_STEPS = 10000; // Safety to prevent infinite loops
+    const int MAX_STEPS = 10000;
 
     while (steps < MAX_STEPS) {
         if (currentState == Q_HALT) {
