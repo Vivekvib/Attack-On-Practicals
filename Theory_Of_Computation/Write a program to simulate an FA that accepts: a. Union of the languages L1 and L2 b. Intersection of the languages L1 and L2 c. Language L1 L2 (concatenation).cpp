@@ -1,20 +1,9 @@
-#include <iostream> // For cout, cin, endl
-#include <string>   // For string
-#include <map>      // For map (to store the transition table)
-#include <set>      // For set (to store final states)
-#include <stdexcept> // For std::out_of_range
+#include <iostream> 
+#include <string> 
+#include <map>  
+#include <set>     
+#include <stdexcept>
 using namespace std;
-/**
- * @brief Simulates the "product machine" for L1 (prefix/suffix) and L2 (a...b).
- * @param inputString The string to process.
- * @param operation "union" or "intersection".
- * @param transitions1 DFA for L1
- * @param startState1 Start state of L1
- * @param finalStates1 Final states of L1
- * @param transitions2 DFA for L2
- * @param startState2 Start state of L2
- * @param finalStates2 Final states of L2
- */
 bool simulateProductDFA(
     const string& inputString,
     const string& operation,
