@@ -1,70 +1,76 @@
-#include <iostream> 
-#include <string>   
-#include <map>      
-#include <set>      
+#include <iostream>
+#include <string>
+#include <vector>
 using namespace std;
-bool simulateDFA(const string& inputString) {
-    set<char> alphabet = {'a', 'b'};
-    map<string, map<char, string>> transitions;
-    transitions["q_EE"] = {{'a', "q_OE"}, {'b', "q_EO"}};
-    transitions["q_OE"] = {{'a', "q_EE"}, {'b', "q_OO"}};
-    transitions["q_EO"] = {{'a', "q_OO"}, {'b', "q_EE"}};
-    transitions["q_OO"] = {{'a', "q_EO"}, {'b', "q_OE"}};
-    string startState = "q_EE";
-    set<string> finalStates = {"q_EE"};
-    string currentState = startState;
-    cout << "Input: '" << inputString << "'" << endl;
-    cout << "Start at state: " << currentState << endl;
-    for (char symbol : inputString) {
-        if (alphabet.find(symbol) == alphabet.end()) {
-            cerr << "Error: Symbol '" << symbol << "' is not in the alphabet {a, b}" << endl;
-            cout << "Result: Rejected\n" << endl;
+enum State {
+    q_ee, 
+    q_oe, 
+    q_eo, 
+    q_oo  
+};
+string getStateName(State s) {
+    switch (s) {
+        case q_ee: return "q_ee (Even a, Even b)";
+        case q_oe: return "q_oe (Odd a, Even b)";
+        case q_eo: return "q_eo (Even a, Odd b)";
+        case q_oo: return "q_oo (Odd a, Odd b)";
+        default: return "unknown";
+    }
+}
+State transition(State currentState, char input) {
+    switch (currentState) {
+        case q_ee:
+            if (input == 'a') return q_oe;
+            if (input == 'b') return q_eo;
+            break;
+        case q_oe:
+            if (input == 'a') return q_ee;
+            if (input == 'b') return q_oo;
+            break;
+        case q_eo:
+            if (input == 'a') return q_oo; 
+            if (input == 'b') return q_ee; 
+            break;
+        case q_oo:
+            if (input == 'a') return q_eo;
+            if (input == 'b') return q_oe; 
+            break;
+    }
+    return currentState;
+}
+bool simulateDFA(string inputString) {
+    State currentState = q_ee; // Start state (0 'a's and 0 'b's is Even-Even)
+    cout << "\nProcessing String: \"" << inputString << "\"" << endl;
+    cout << "Start: " << getStateName(currentState) << endl;
+    for (char c : inputString) {
+        if (c != 'a' && c != 'b') {
+            cout << "Error: Invalid character '" << c << "'. Alphabet is {a, b}." << endl;
             return false;
         }
-        string nextState = transitions[currentState][symbol];
-        cout << "Read '" << symbol << "', transition " << currentState << " -> " << nextState << endl;
+        State nextState = transition(currentState, c);
+        cout << "  Input '" << c << "' : " 
+             << getStateName(currentState) << " -> " << getStateName(nextState) << endl;
         currentState = nextState;
     }
-    bool isAccepted = (finalStates.find(currentState) != finalStates.end());
-    cout << "Finished processing. Final state is: " << currentState << endl;
-    if (isAccepted) {
-        cout << "Result: Accepted\n" << endl;
+    cout << "Final State: " << getStateName(currentState) << endl;
+    if (currentState == q_ee) {
+        cout << "Result: ACCEPTED (Even 'a's and Even 'b's)" << endl;
+        return true;
     } else {
-        cout << "Result: Rejected\n" << endl;
+        cout << "Result: REJECTED" << endl;
+        return false;
     }
-    return isAccepted;
 }
 int main() {
-    string testStrings[] = {
-        // Accepted
-        "",        
-        "aa",      
-        "bb",       
-        "abab",    
-        "aabb",    
-        "bbaabbaa", 
-        // Rejected
-        "a",       
-        "b",       
-        "ab",     
-        "aaa",    
-        "abb"      
-    };
-    int numTests = sizeof(testStrings) / sizeof(testStrings[0]);
-    cout << "--- Running Test Cases ---" << endl;
-    for (int i = 0; i < numTests; ++i) {
-        simulateDFA(testStrings[i]);
-    }
-    cout << "--- Interactive Mode ---" << endl;
-    cout << "Enter 'exit' to quit." << endl;
-    string userInput;
+    cout << "=== DFA Simulator ===" << endl;
+    cout << "Language: EVEN-EVEN (Even number of 'a's and Even number of 'b's)." << endl;
+    cout << "States: q_ee(F), q_oe, q_eo, q_oo" << endl;
+    string input;
     while (true) {
-        cout << "Enter a string of 'a's and 'b's: ";
-        getline(cin, userInput);
-        if (userInput == "exit") {
-            break;
-        }     
-        simulateDFA(userInput);
+        cout << "\nEnter a string over {a, b} (or 'exit' to quit): ";
+        cin >> input;
+        if (input == "exit") break;
+        simulateDFA(input);
     }
     return 0;
 }
